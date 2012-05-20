@@ -8,6 +8,9 @@ The difference bewteen other nodewatch tools is that it does not differentiate e
 
 *Recursively watch a directory*
 
+##Install
+
+    npm install node-watch
 
 ## Example
 

@@ -1,11 +1,12 @@
 {
     "name": "node-watch" 
+  , "version": "0.1.1"
   , "description": "A file watcher utility for nodeJS"
-  , "version": "0.1.0"
   , "url": "https://github.com/yuanchuan/node-watch"
   , "author": "yuanchuan <yuanchuan23@gmail.com> (http://yuanchuan.name)"
-  , "main": "./lib/watch.js"
+  , "main": "lib/watch.js"
   , "keywords": ["nodewatch", "watch", "watchfile"]
+  , "dependencies": {}
   , "repository": {
         "type": "git"
       , "url": "git://github.com/yuanchuan/node-watch.git"
