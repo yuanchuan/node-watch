@@ -1,19 +1,13 @@
 {
-    "name": "nwatch"
-  , "description": "a file watcher utility for nodeJS"
+    "name": "node-watch" 
+  , "description": "A file watcher utility for nodeJS"
   , "version": "0.1.0"
-  , "homepage": "https://github.com/yuanchuan/nwatch"
+  , "url": "https://github.com/yuanchuan/node-watch"
   , "author": "yuanchuan <yuanchuan23@gmail.com> (http://yuanchuan.name)"
-  , "main": "./index.js"
-  , "keywords": {
-        "nodewatch"
-      , "watch"
-      , "watchfile"
-    }
-  , 
+  , "main": "./lib/watch.js"
+  , "keywords": ["nodewatch", "watch", "watchfile"]
   , "repository": {
         "type": "git"
-      , "url": "git://github.com/yuanchuan/nwatch.git"
+      , "url": "git://github.com/yuanchuan/node-watch.git"
     }
-  , "engines": { "node": "*" }
 }
