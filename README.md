@@ -1,4 +1,4 @@
-#Nodewatch
+#nwatch (nodewatch)
 
 This program is part of Markab(an instant mockup tool, still under development). 
 
@@ -11,7 +11,7 @@ The difference bewteen other nodewatch tools is that it does not differentiate e
 
 ## Example
 
-    var watch = require('./nodewatch');
+    var watch = require('nwatch');
 
     watch('somedir', function(filename) {
       console.log(filename, ' changed.');

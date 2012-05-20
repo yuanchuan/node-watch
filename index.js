@@ -1,1 +1,1 @@
-module.exports = require('./lib/watch');
+module.exports = require('./lib/nwatch');
