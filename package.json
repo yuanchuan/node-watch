@@ -1,0 +1,13 @@
+{
+  "author": "yuanchuan <yuanchuan23@gmail.com> (yuanchuan.name)",
+  "name": "watch.js",
+  "description": "File watcher utility for nodeJS",
+  "version": "0.1.0",
+  "homepage": "https://github.com/yuanchuan/watch.js",
+  "repository": {
+    "url": "git://github.com/yuanchuan/wathc.js.git"
+  },
+  "engines": {
+    "node": "*"
+  }
+}
