@@ -1,7 +1,7 @@
 {
     "name": "node-watch" 
-  , "version": "0.2.3"
-  , "description": "NodeJS file.watch wrapper"
+  , "version": "0.2.4"
+  , "description": "fs.watch() wrapper of Nodejs "
   , "url": "https://github.com/yuanchuan/node-watch"
   , "author": "yuanchuan <yuanchuan23@gmail.com> (http://yuanchuan.name)"
   , "main": "./lib/watch.js"
