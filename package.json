@@ -1,6 +1,6 @@
 {
     "name": "node-watch" 
-  , "version": "0.2.7"
+  , "version": "0.2.8"
   , "description": "fs.watch() wrapper of Nodejs "
   , "url": "https://github.com/yuanchuan/node-watch"
   , "author": "yuanchuan <yuanchuan23@gmail.com> (http://yuanchuan.name)"
