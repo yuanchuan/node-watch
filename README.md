@@ -9,15 +9,28 @@ This module will watch a directory recursively by default while trying to solve 
 
 In current version it does not differentiate event like "rename" or "delete". Once there is a change, the callback function will be triggered.
 
-## Installation
+### Installation
 
-    npm install node-watch
+```bash
+npm install node-watch
+```
 
-## Example
+### Example
 
-    var watch = require('node-watch');
+```js
+var watch = require('node-watch');
 
-    watch('somedir_or_somefile', function(filename) {
-      console.log(filename, ' changed.');
-    });
+watch('somedir_or_somefile', function(filename) {
+  console.log(filename, ' changed.');
+});
+```
 
+### Options
+
+  `recursive`: [ true | fase ]  --  If watch recursively or not. True by default.
+
+```js
+watch('somedir', { recursive: false }, function(filename) {
+  console.log(filename, ' changed.');
+});
+```
