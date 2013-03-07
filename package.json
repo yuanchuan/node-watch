@@ -6,6 +6,9 @@
   , "author": "yuanchuan <yuanchuan23@gmail.com> (http://yuanchuan.name)"
   , "main": "./lib/watch.js"
   , "keywords": ["nodewatch", "watch", "watchfile"]
+  , "bugs": {
+      "url": "https://github.com/yuanchuan/node-watch/issues"
+    }
   , "repository": {
         "type": "git"
       , "url": "git://github.com/yuanchuan/node-watch.git"
