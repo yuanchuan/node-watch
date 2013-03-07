@@ -27,7 +27,7 @@ watch('somedir_or_somefile', function(filename) {
 
 ### Options
 
-  `recursive`: [ true | fase ]  --  If watch recursively or not. True by default.
+  `recursive`: Watch it recursively or not (defaults to true)
 
 ```js
 watch('somedir', { recursive: false }, function(filename) {
