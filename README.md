@@ -21,7 +21,7 @@ watch('somedir_or_somefile', function(filename) {
 ### Why fs.watch wrapper
 
 * Some editors will generate temporary files which will cause the callback function to trigger multiple times.
-* when watching a single file, the callback function will only be triggered one time and then the file is unwatched.
+* when watching a single file the callback function will only be triggered one time and then is seem to be unwatched.
 * Missing an option to watch a directory recursively.
  
  
