@@ -8,8 +8,6 @@ A [fs.watch](http://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener
 npm install node-watch
 ```
 
- 
-
 ### Example
 
 ```js
@@ -27,14 +25,11 @@ watch('somedir_or_somefile', function(filename) {
 * Missing an option to watch a directory recursively.
  
  
-
-
 ### The difference
 This module **currently** does not differentiate event like `rename` or `delete`. Once there is a change, the callback function will be triggered.
 
 
-
-## Options
+### Options
 
 `recursive`:Watch it recursively or not (defaults to **true**). 
 
@@ -49,10 +44,9 @@ watch('somedir', { recursive: false, followSymLinks: true }, function(filename) 
 });
 ```
 
-##FAQ
+###FAQ
 
-
-### 1. How to watch mutiple files or directories.
+#### 1. How to watch mutiple files or directories
 
 ```js
 watch(['file1', 'file2'], function(file) {
@@ -60,7 +54,7 @@ watch(['file1', 'file2'], function(file) {
 });
 ```
 
-### 2. How to filter files
+#### 2. How to filter files
 
 Write your own filter function as a high order function. For example:
 
@@ -75,6 +69,6 @@ var filter = function(pattern, fn) {
 
 // only watch for js files
 watch('mydir', filter(/\.js$/, function(filename) {
- 
+  // 
 }));
 ```
