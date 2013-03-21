@@ -1,5 +1,5 @@
 #Node-watch
-A [fs.watch](http://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener) wrapper to watch files or directories(**recursively** by default).  
+A [fs.watch](http://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener) wrapper to watch files or directories(recursively by default).  
 
 
 ### Installation
@@ -73,7 +73,7 @@ var filter = function(pattern, fn) {
   }
 }
 
-// watch for only js files
+// only watch for js files
 watch('mydir', filter(/\.js$/, function(filename) {
  
 }));
