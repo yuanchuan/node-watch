@@ -20,7 +20,7 @@ watch('somedir_or_somefile', function(filename) {
 
 ### Why fs.watch wrapper
 
-* Some editors will generate temporary files which will cause the callback function to trigger multiple times.
+* Some editors will generate temporary files which will cause the callback function to be triggered multiple times.
 * when watching a single file the callback function will only be triggered one time and then is seem to be unwatched.
 * Missing an option to watch a directory recursively.
  
@@ -56,13 +56,13 @@ watch(['file1', 'file2'], function(file) {
 
 #### 2. How to filter files
 
-Write your own filter function as a high order function. For example:
+Write your own filter function as a higher-order function. For example:
 
 ```js
 var filter = function(pattern, fn) {
   return function(filename) {
     if (pattern.test(filename)) {
-      fn(filename):
+      fn(filename);
     }
   }
 }
