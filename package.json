@@ -13,4 +13,8 @@
         "type": "git"
       , "url": "git://github.com/yuanchuan/node-watch.git"
     }
+  , "devDependencies": {
+        "mocha": "1.8.1"
+      , "tmp": "0.0.20"
+    }
 }
