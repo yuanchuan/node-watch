@@ -20,7 +20,7 @@ describe('watcher', function(){
           fs.writeFileSync(f, 'test');
         });
       });
-      done();
+      setTimeout(done, 1500);
     });
   });
 
@@ -35,13 +35,12 @@ describe('watcher', function(){
       setTimeout(function() {
         assert.equal(watcher.watchers.length, 5);
         done();
-      }, 200);
+      }, 500);
     }, 100);
   });
 
   it('should provide a close method that closes all watchers', function(done) {
-    var watcher = watch(tmpDir, function() {}),
-      closed = 0;
+    var watcher = watch(tmpDir, function() {}), closed = 0;
 
     assert.equal(watcher.watchers.length, 1);
     assert.equal(closed, 0);
@@ -58,6 +57,19 @@ describe('watcher', function(){
       assert.equal(watcher.watchers.length, 0);
       assert.equal(closed, 4);
       done();
+    }, 100);
+  });
+
+  it('should proxy events from all watchers', function(done) {
+    var watcher = watch(tmpDir, function(f) {}), changed = 0;
+    setTimeout(function() {
+      watcher.on('change', function() { changed++; });
+      fs.appendFileSync(path.join(tmpDir, 'one', 'one'), 'test event');
+
+      setTimeout(function() {
+        assert.equal(changed, 1);
+        done();
+      }, 200);
     }, 100);
   });
 });
