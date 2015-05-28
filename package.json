@@ -9,6 +9,7 @@
   , "bugs": {
       "url": "https://github.com/yuanchuan/node-watch/issues"
     }
+  , "license": "MIT"
   , "repository": {
         "type": "git"
       , "url": "git://github.com/yuanchuan/node-watch.git"
