@@ -1,17 +1,25 @@
 {
-    "name": "node-watch" 
-  , "version": "0.3.4"
-  , "description": "fs.watch() wrapper of Nodejs "
-  , "url": "https://github.com/yuanchuan/node-watch"
-  , "author": "yuanchuan <yuanchuan23@gmail.com> (http://yuanchuan.name)"
-  , "main": "./lib/watch.js"
-  , "keywords": ["nodewatch", "watch", "watchfile"]
-  , "bugs": {
-      "url": "https://github.com/yuanchuan/node-watch/issues"
-    }
-  , "license": "MIT"
-  , "repository": {
-        "type": "git"
-      , "url": "git://github.com/yuanchuan/node-watch.git"
-    }
+  "description": "fs.watch() wrapper of Nodejs ",
+  "license": "MIT",
+  "name": "node-watch",
+  "repository": {
+    "url": "git://github.com/yuanchuan/node-watch.git",
+    "type": "git"
+  },
+  "keywords": [
+    "fs.watch",
+    "watch",
+    "watchfile"
+  ],
+  "version": "0.3.5",
+  "bugs": {
+    "url": "https://github.com/yuanchuan/node-watch/issues"
+  },
+  "url": "https://github.com/yuanchuan/node-watch",
+  "author": "yuanchuan <yuanchuan23@gmail.com> (http://yuanchuan.name)",
+  "main": "./lib/watch.js",
+  "homepage": "https://github.com/yuanchuan/node-watch#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
 }
