@@ -79,7 +79,7 @@ Alternatively, supply a filter function in the options object. For example:
 // don't watch node_modules folder
 var options = {
   filter : function(filename) {
-    return /node_modules/.test(filename);
+    return !/node_modules/.test(filename);
   }
 };
 watch('mydir', options, function(filename) {
