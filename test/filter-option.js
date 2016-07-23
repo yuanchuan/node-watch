@@ -55,8 +55,10 @@ describe('filter-option', function() {
       }
     });
 
-    modify(tree.getPath('home/a/file1'));
-    modify(tree.getPath('home/node_modules/module/file1'));
+    setTimeout(function() {
+      modify(tree.getPath('home/a/file1'));
+      modify(tree.getPath('home/node_modules/module/file1'));
+    }, 200);
 
     setTimeout(function() {
       if (shouldModify) {
@@ -66,7 +68,7 @@ describe('filter-option', function() {
         assert(false, 'fail to ingore path `node_modules`');
       }
       done();
-    }, 200);
+    }, 500);
   });
 
 });
