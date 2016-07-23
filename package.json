@@ -20,7 +20,7 @@
   "main": "./lib/watch.js",
   "homepage": "https://github.com/yuanchuan/node-watch#readme",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha"
+    "test": "mocha"
   },
   "devDependencies": {
     "fs-extra": "^0.30.0",
