@@ -37,6 +37,8 @@ This module **currently** does not differentiate event like `rename` or `delete`
 
 `maxSymLevel`: The max number of following symbolic links, in order to prevent circular links (defaults to **1**). 
 
+`filter`: node-watch will only watch elements that pass the test implemented by the provided function. The filter function is provided with a full path string argument(defaults to ```(fullPath)=>true``` ). 
+
 
 ```js
 watch('somedir', { recursive: false, followSymLinks: true }, function(filename) {
@@ -56,7 +58,7 @@ watch(['file1', 'file2'], function(file) {
 
 #### 2. How to filter files
 
-Write your own filter function as a higher-order function. For example:
+You can write your own filter function as a higher-order function. For example:
 
 ```js
 var filter = function(pattern, fn) {
@@ -66,9 +68,22 @@ var filter = function(pattern, fn) {
     }
   }
 }
-
 // only watch for js files
 watch('mydir', filter(/\.js$/, function(filename) {
   // 
 }));
 ```
+
+Alternatively, supply a filter function in the options object. For example:
+```js
+// don't watch node_modules folder
+var options = {
+  filter : function(filename) {
+    return !/node_modules/.test(filename);
+  }
+};
+watch('mydir', options, function(filename) {
+  // 
+}));
+```
+The second approach helps avoiding the [max open files](http://stackoverflow.com/questions/3734932/max-open-files-for-working-process) limit
