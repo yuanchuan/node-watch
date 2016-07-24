@@ -61,12 +61,8 @@ describe('filter-option', function() {
     }, 200);
 
     setTimeout(function() {
-      if (shouldModify) {
-        assert(false, 'watch failed');
-      }
-      if (shouldNotModify) {
-        assert(false, 'fail to ingore path `node_modules`');
-      }
+      assert(!shouldModify, 'watch failed');
+      assert(!shouldNotModify, 'fail to ingore path `node_modules`');
       done();
     }, 500);
   });
