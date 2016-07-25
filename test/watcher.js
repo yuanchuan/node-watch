@@ -9,7 +9,7 @@ describe('watcher', function(){
   var names = ['one', 'two', 'three'];
 
   beforeEach(function(done) {
-    tmp.dir(function(err, dir) {
+    tmp.dir({ unsafeCleanup: true }, function(err, dir) {
       if (err) return done(err);
       tmpDir = dir;
       names.forEach(function(name) {
