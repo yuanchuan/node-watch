@@ -39,7 +39,7 @@ This module **currently** does not differentiate event like `rename` or `delete`
 
 `maxSymLevel`: The max number of following symbolic links, in order to prevent circular links (defaults to **1**).
 
-`filter`: node-watch will only watch elements that pass the test implemented by the provided function. The filter function is provided with a full path string argument(defaults to ```(fullPath)=>true``` ).
+`filter`: node-watch will only watch elements that pass the test implemented by the provided function. The filter function is provided with a full path string argument(defaults to ```(fullPath) => true``` ).
 
 
 ```js
@@ -50,7 +50,7 @@ watch('somedir', { recursive: false, followSymLinks: true }, function(filename) 
 
 ### Watcher object
 
-Since v0.4.0 `watch()` will return a [fs.FSWatcher]([fs.FSWatcher](https://nodejs.org/api/fs.html#fs_class_fs_fswatcher) like object,
+Since v0.4.0 `watch()` will return a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_class_fs_fswatcher) like object,
 so you can close the watcher or detect change by `change` event instead of the old callback function.
 
 ```js
@@ -61,12 +61,11 @@ watcher.on('change', function(file) {
 });
 
 watcher.on('error', function(err) {
-
+  //
 });
 
 // close
 watcher.close();
-
 ```
 
 
