@@ -1,0 +1,16 @@
+home/
+  a/
+    file1
+    file2
+  b/
+    file1
+    file2
+  c/
+  node_modules/
+    ma/
+      file1
+      file2
+    mb/
+      file1
+      file2
+    mc/

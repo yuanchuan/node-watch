@@ -1,5 +1,6 @@
-#Node-watch
-A [fs.watch](http://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener) wrapper to watch files or directories(recursively by default).
+# node-watch
+
+A neat [fs.watch](http://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener) wrapper.
 
 [![NPM](https://nodei.co/npm/node-watch.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/node-watch.png/)
 
@@ -15,53 +16,65 @@ npm install node-watch
 ```js
 var watch = require('node-watch');
 
-watch('somedir_or_somefile', function(filename) {
-  console.log(filename, ' changed.');
+watch('somedir_or_somefile', { recursive: true }, function(evt, name) {
+  console.log(name, ' changed.');
 });
 ```
 
-### Why fs.watch wrapper
-
-* Some editors will generate temporary files which will cause the callback function to be triggered multiple times.
-* when watching a single file the callback function will only be triggered one time and then is seem to be unwatched.
-* Missing an option to watch a directory recursively.
-
-
-### The difference
-This module **currently** does not differentiate event like `rename` or `delete`. Once there is a change, the callback function will be triggered.
-
-
-### Options
-
-`recursive`:Watch it recursively or not (defaults to **true**).
-
-`followSymLinks`: Follow symbolic links or not (defaults to **false**).
-
-`maxSymLevel`: The max number of following symbolic links, in order to prevent circular links (defaults to **1**).
-
-`filter`: node-watch will only watch elements that pass the test implemented by the provided function. The filter function is provided with a full path string argument(defaults to ```(fullPath) => true``` ).
-
+This is a completely rewritten version, **much faster** and in a more **memory-efficient** way.
+So with recent nodejs versions under OS X or Windows you can do something like this:
 
 ```js
-watch('somedir', { recursive: false, followSymLinks: true }, function(filename) {
-  console.log(filename, ' changed.');
+// watch the whole disk
+watch('/', { recursive: true }, console.log);
+```
+
+
+### Why
+
+* Some editors will generate temporary files which will cause the callback function to be triggered multiple times.
+* When watching a single file the callback function will only be triggered once.
+* <del>Missing an option to watch a directory recursively.</del>
+* Recursive watch is not supported on Linux or in older versions of nodejs.
+
+
+### Notice
+
+* The `recursive` option is defaults to be `false` since v0.5.0.
+* Parameters in the callback function always provide event name since v0.5.0.
+
+
+### Events
+
+The events provided by the callback function would be either `update` or `remove`.
+
+```js
+watch('./', function(evt, name) {
+
+  if (evt == 'remove') {
+    // on delete
+  }
+
+  if (evt == 'update') {
+    // on create or modify
+  }
+
 });
 ```
 
 ### Watcher object
 
-Since v0.4.0 `watch()` will return a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_class_fs_fswatcher) like object,
-so you can close the watcher or detect change by `change` event instead of the old callback function.
+`watch` function returns a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_class_fs_fswatcher) like object as the same as `fs.watch`.
 
 ```js
-var watcher = watch('./');
+var watcher = watch('./', { recursive: true });
 
-watcher.on('change', function(file) {
-  //
+watcher.on('change', function(evt, name) {
+  // callback
 });
 
 watcher.on('error', function(err) {
-  //
+  // handle error
 });
 
 // close
@@ -69,44 +82,63 @@ watcher.close();
 ```
 
 
-###FAQ
+### Extra options
 
-#### 1. How to watch mutiple files or directories
+* `filter`: Filter files or directories or skip to watch them.
 
 ```js
-watch(['file1', 'file2'], function(file) {
-  //
+var options = {
+  recursive: true,
+  filter : function(name) {
+    return !/node_modules/.test(name);
+  }
+};
+
+// ignore node_modules
+watch('mydir', options, console.log);
+```
+
+### Other ways to filter
+
+a) filtering directly inside the callback function:
+
+```js
+watch('./', { recursive: true }, function(evt, name) {
+  // ignore node_modules
+  if (!/node_modules/.test(name)) {
+    // do something
+  }
 });
 ```
 
-#### 2. How to filter files
-
-You can write your own filter function as a higher-order function. For example:
+b) filtering with higher order function:
 
 ```js
-var filter = function(pattern, fn) {
-  return function(filename) {
-    if (pattern.test(filename)) {
-      fn(filename);
+function filter(pattern, fn) {
+  return function(evt, name) {
+    if (pattern.test(name)) {
+      fn(evt, name);
     }
   }
 }
-// only watch for js files
-watch('mydir', filter(/\.js$/, function(filename) {
-  //
-}));
+
+// watch only for js files
+watch('.', filter(/\.js$/, console.log));
 ```
 
-Alternatively, supply a filter function in the options object. For example:
+### Misc
+
+##### 1. Watch mutiple files or directories in one place
+
 ```js
-// don't watch node_modules folder
-var options = {
-  filter : function(filename) {
-    return !/node_modules/.test(filename);
-  }
-};
-watch('mydir', options, function(filename) {
-  //
-}));
+watch(['file1', 'file2'], console.log);
 ```
-The second approach helps avoiding the [max open files](http://stackoverflow.com/questions/3734932/max-open-files-for-working-process) limit
+
+##### 2. Catch errors when removing watched directoies on Windows
+
+```js
+watch('somedir', console.log)
+  .on('error', function() {
+    // ignore it if you wish.
+  });
+```
