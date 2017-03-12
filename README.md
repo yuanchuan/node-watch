@@ -134,7 +134,7 @@ watch('.', filter(/\.js$/, console.log));
 watch(['file1', 'file2'], console.log);
 ```
 
-##### 2. Catch errors when removing watched directoies on Windows
+##### 2. Catch errors after deleting a watched directory on Windows
 
 ```js
 watch('somedir', console.log)
