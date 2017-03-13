@@ -94,12 +94,12 @@ var options = {
 };
 
 // ignore node_modules
-watch('mydir', options, console.log);
+watch('./', options, console.log);
 ```
 
 ### Known bugs on Windows
-1. Failed to detect `remove` event on node < **v4.2.5**
-2. Failed to get deleted filename or directory name node < **v4.2.5**
+1. Failed to detect `remove` event on nodejs < **v4.2.5**
+2. Failed to get deleted filename or directory name on nodejs < **v4.2.5**
 
 ### Misc
 
