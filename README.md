@@ -126,10 +126,12 @@ function filter(pattern, fn) {
 watch('.', filter(/\.js$/, console.log));
 ```
 
+### Known bugs on Windows
+1. Failed to detect `remove` event below **node@v4.2.5**
+2. Failed to get deleted filename or directory name below **node@v4.2.5**
+
 ### Misc
-
-##### 1. Watch mutiple files or directories in one place
-
+##### 1. watch multiple files or directories in one place
 ```js
 watch(['file1', 'file2'], console.log);
 ```
