@@ -40,9 +40,9 @@ watch('/', { recursive: true }, console.log);
 
 ### Changelog
 
-* The `recursive` option is defaults to be `false` since v0.5.0.
-* Parameters in the callback function always provide event name since v0.5.0.
-* Returns a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_class_fs_fswatcher) like object since v0.4.0.
+* The `recursive` option is defaults to be `false` since **v0.5.0**.
+* The callback function will always provide a event name since **v0.5.0**.
+* Returns a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_class_fs_fswatcher) like object since **v0.4.0**.
 
 
 ### Events
@@ -97,7 +97,7 @@ var options = {
 watch('mydir', options, console.log);
 ```
 
-## Known bugs on Windows
+### Known bugs on Windows
 1. Failed to detect `remove` event on node < **v4.2.5**
 2. Failed to get deleted filename or directory name node < **v4.2.5**
 
@@ -127,17 +127,17 @@ watch('./', { recursive: true }, function(evt, name) {
 function filter(pattern, fn) {
   return function(evt, name) {
     if (pattern.test(name)) {
-      fn(evt, name);
+      fn.apply(null, arguments);
     }
   }
 }
 
 // watch only for js files
-watch('.', filter(/\.js$/, console.log));
+watch('./', filter(/\.js$/, console.log));
 ```
 
 
-## License
+### License
 Licensed under MIT
 
 Copyright (c) 2012-2017 [yuanchuan](https://github.com/yuanchuan)
