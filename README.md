@@ -30,7 +30,7 @@ watch('/', { recursive: true }, console.log);
 ```
 
 
-### Why
+### Why?
 
 * Some editors will generate temporary files which will cause the callback function to be triggered multiple times.
 * When watching a single file the callback function will only be triggered once.
@@ -38,10 +38,11 @@ watch('/', { recursive: true }, console.log);
 * Recursive watch is not supported on Linux or in older versions of nodejs.
 
 
-### Notice
+### Changelog
 
 * The `recursive` option is defaults to be `false` since v0.5.0.
 * Parameters in the callback function always provide event name since v0.5.0.
+* Returns a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_class_fs_fswatcher) like object since v0.4.0.
 
 
 ### Events
@@ -64,7 +65,7 @@ watch('./', function(evt, name) {
 
 ### Watcher object
 
-`watch` function returns a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_class_fs_fswatcher) like object as the same as `fs.watch`.
+`watch` function returns a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_class_fs_fswatcher) like object as the same as `fs.watch` (>= v0.4.0).
 
 ```js
 var watcher = watch('./', { recursive: true });
@@ -81,10 +82,8 @@ watcher.on('error', function(err) {
 watcher.close();
 ```
 
-
 ### Extra options
-
-* `filter`: Filter files or directories or skip to watch them.
+* `filter` Filter files or directories or skip to watch them.
 
 ```js
 var options = {
@@ -98,9 +97,20 @@ var options = {
 watch('mydir', options, console.log);
 ```
 
-### Other ways to filter
+## Known bugs on Windows
+1. Failed to detect `remove` event on node < **v4.2.5**
+2. Failed to get deleted filename or directory name node < **v4.2.5**
 
-a) filtering directly inside the callback function:
+### Misc
+
+##### 1. Watch multiple files or directories in one place
+```js
+watch(['file1', 'file2'], console.log);
+```
+
+##### 2. Other ways to filter
+
+*a)* filtering directly inside the callback function:
 
 ```js
 watch('./', { recursive: true }, function(evt, name) {
@@ -111,7 +121,7 @@ watch('./', { recursive: true }, function(evt, name) {
 });
 ```
 
-b) filtering with higher order function:
+*b)* filtering with higher order function:
 
 ```js
 function filter(pattern, fn) {
@@ -126,12 +136,9 @@ function filter(pattern, fn) {
 watch('.', filter(/\.js$/, console.log));
 ```
 
-### Known bugs on Windows
-1. Failed to detect `remove` event below **node@v4.2.5**
-2. Failed to get deleted filename or directory name below **node@v4.2.5**
 
-### Misc
-##### 1. watch multiple files or directories in one place
-```js
-watch(['file1', 'file2'], console.log);
-```
+## License
+Licensed under MIT
+
+Copyright (c) 2012-2017 [yuanchuan](https://github.com/yuanchuan)
+
