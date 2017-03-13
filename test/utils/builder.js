@@ -11,7 +11,7 @@ var code = structure
     return {
       indent: line.length - line.replace(/^\s+/,'').length,
       type: /\/$/.test(line) ? 'dir': 'file',
-      text: line.replace(/^\s+|\s*\/\s*/g, '')
+      text: line.replace(/^\s+|\s*\/\s*|\s+$/g, '')
     }
   })
 
