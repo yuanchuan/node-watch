@@ -1,4 +1,4 @@
-# node-watch
+# node-watch [![Status](https://travis-ci.org/yuanchuan/node-watch.svg?branch=master)](https://travis-ci.org/yuanchuan/node-watch "See test builds")
 
 A neat [fs.watch](http://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener) wrapper.
 
