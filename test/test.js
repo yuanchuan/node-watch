@@ -34,7 +34,7 @@ describe('watch for files', function() {
     tree.modify(file, 600);
   });
 
-  it('should watch files inside a folder', function(done) {
+  it('should watch files inside a directory', function(done) {
     var dir = 'home/a';
     var fpath = tree.getPath('home/a');
     var stack = [
@@ -47,8 +47,8 @@ describe('watch for files', function() {
       if (!stack.length) done();
     });
 
-    tree.modify('home/a/file1')
-    tree.modify('home/a/file2')
+    tree.modify('home/a/file1');
+    tree.modify('home/a/file2');
   });
 
   it('should watch recursively with `recursive: true` option', function(done) {
@@ -89,7 +89,7 @@ describe('watch for directoies', function() {
     var dir = tree.getPath('home/c');
 
     watcher = watch(home, { recursive: true }, function(evt, name) {
-      assert.equal(dir, name)
+      assert.equal(dir, name);
       done();
     });
 
@@ -129,7 +129,7 @@ describe('events', function() {
     tree.modify(file, 100);
   });
 
-  it('should report `update` on create new files', function(done) {
+  it('should report `update` on new files', function(done) {
     var dir = tree.getPath('home/a');
     var file = 'home/a/newfile' + Date.now();
     var fpath = tree.getPath(file);
@@ -177,8 +177,8 @@ describe('options', function() {
 
     it('should only report filtered files', function(done) {
       var dir = tree.getPath('home/a');
-      var file1 = 'home/a/file1'
-      var file2 = 'home/a/file2'
+      var file1 = 'home/a/file1';
+      var file2 = 'home/a/file2';
 
       var options = {
         filter: function(name) {
@@ -252,7 +252,7 @@ describe('watcher object', function() {
     tree.modify(file);
   });
 
-  it('should close the watcher using .close()', function(done) {
+  it('should close a watcher using .close()', function(done) {
     var dir = tree.getPath('home/a');
     var file = 'home/a/file1';
     var times = 0;
@@ -265,8 +265,8 @@ describe('watcher object', function() {
     tree.modify(file);
     tree.modify(file, 300);
     setTimeout(function() {
-      assert(watcher.isClosed() === true)
-      assert(times === 0)
+      assert(watcher.isClosed() === true);
+      assert(times === 0, 'failed to close the watcher');
       done();
     }, 400);
   });
