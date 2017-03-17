@@ -6,6 +6,9 @@ home/
     file1
     file2
   c/
+  bb/
+    file1
+    file2
   node_modules/
     ma/
       file1
