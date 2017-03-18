@@ -30,8 +30,8 @@ describe('watch for files', function() {
       }
     });
     tree.modify(file);
-    tree.modify(file, 300);
-    tree.modify(file, 600);
+    tree.modify(file, 400);
+    tree.modify(file, 800);
   });
 
   it('should watch files inside a directory', function(done) {
@@ -41,30 +41,28 @@ describe('watch for files', function() {
       tree.getPath('home/a/file1'),
       tree.getPath('home/a/file2')
     ];
-
     watcher = watch(fpath, function(evt, name) {
       stack.splice(stack.indexOf(name), 1);
       if (!stack.length) done();
     });
 
-    tree.modify('home/a/file1');
-    tree.modify('home/a/file2');
+    tree.modify('home/a/file1', 200);
+    tree.modify('home/a/file2', 300);
   });
 
   it('should watch recursively with `recursive: true` option', function(done) {
     var dir = tree.getPath('home');
-    var file = tree.getPath('home/a/file1');
+    var file = tree.getPath('home/bb/file1');
     watcher = watch(dir, { recursive: true }, function(evt, name) {
       assert.equal(file, name);
       done();
     });
-    setTimeout(function() {
-      tree.modify('home/a/file1');
-    }, 200);
+
+    tree.modify('home/bb/file1', 200);
   });
 
   it('should ignore duplicate changes', function(done) {
-    var file = 'home/a/file1';
+    var file = 'home/a/file2';
     var fpath = tree.getPath(file);
     var times = 0;
     watcher = watch(fpath, function(evt, name) {
@@ -141,7 +139,6 @@ describe('events', function() {
 
 });
 
-
 describe('options', function() {
   describe('filter', function() {
     it('should only watch filtered directories', function(done) {
@@ -155,7 +152,7 @@ describe('options', function() {
         }
       };
 
-      watcher = watch(tree.getPath('home'), option, function(name) {
+      watcher = watch(tree.getPath('home'), option, function(evt, name) {
         if (/node_modules/.test(name)) {
           shouldNotModify = true;
         } else {
@@ -163,16 +160,14 @@ describe('options', function() {
         }
       });
 
-      setTimeout(function() {
-        tree.modify('home/a/file1');
-        tree.modify('home/node_modules/ma/file1');
-      }, 200);
+      tree.modify('home/b/file1', 200);
+      tree.modify('home/node_modules/ma/file1', 200);
 
       setTimeout(function() {
         assert(!shouldModify, 'watch failed');
         assert(!shouldNotModify, 'fail to ingore path `node_modules`');
         done();
-      }, 500);
+      }, 600);
     });
 
     it('should only report filtered files', function(done) {
