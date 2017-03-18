@@ -40,7 +40,7 @@ watch('/', { recursive: true }, console.log);
 
 ### Changelog
 
-* The `recursive` option is defaults to be `false` since **v0.5.0**.
+* The `recursive` option is default to be `false` since **v0.5.0**.
 * The callback function will always provide a event name since **v0.5.0**.
 * Returns a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_class_fs_fswatcher) like object since **v0.4.0**.
 
@@ -97,9 +97,12 @@ var options = {
 watch('./', options, console.log);
 ```
 
-### Known bugs on Windows
-1. Failed to detect `remove` event on nodejs < **v4.2.5**
-2. Failed to get deleted filename or directory name on nodejs < **v4.2.5**
+### Known bugs
+
+**Windows, node < v4.2.5**
+
+  * Failed to detect `remove` event
+  * Failed to get deleted filename or directory name
 
 ### Misc
 
