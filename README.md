@@ -1,6 +1,6 @@
 # node-watch [![Status](https://travis-ci.org/yuanchuan/node-watch.svg?branch=master)](https://travis-ci.org/yuanchuan/node-watch "See test builds")
 
-A neat [fs.watch](http://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener) wrapper.
+A wrapper and enhancements for [fs.watch](http://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener) (with 0 dependencies).
 
 [![NPM](https://nodei.co/npm/node-watch.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/node-watch.png/)
 
@@ -22,7 +22,7 @@ watch('somedir_or_somefile', { recursive: true }, function(evt, name) {
 ```
 
 This is a completely rewritten version, **much faster** and in a more **memory-efficient** way.
-So with recent nodejs versions under OS X or Windows you can do something like this:
+So with recent nodejs under OS X or Windows you can do something like this:
 
 ```js
 // watch the whole disk
@@ -41,7 +41,7 @@ watch('/', { recursive: true }, console.log);
 ### Changelog
 
 * The `recursive` option is default to be `false` since **v0.5.0**.
-* The callback function will always provide a event name since **v0.5.0**.
+* The callback function will always provide an event name since **v0.5.0**.
 * Returns a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_class_fs_fswatcher) like object since **v0.4.0**.
 
 
@@ -97,7 +97,7 @@ var options = {
 watch('./', options, console.log);
 ```
 
-### Known bugs
+### Known issues
 
 **Windows, node < v4.2.5**
 
@@ -139,9 +139,26 @@ function filter(pattern, fn) {
 watch('./', filter(/\.js$/, console.log));
 ```
 
+##### 3. customize watch command line tool
+```js
+#!/usr/bin/env node
+
+/* https://github.com/nodejs/node-v0.x-archive/issues/3211 */
+require('epipebomb')();
+
+var watch = require('node-watch');
+var target = process.argv[2] || './';
+var watcher = watch(target, { recursive: true }, console.log);
+
+process.on('SIGINT', watcher.close);
+```
+Monitoring chrome from disk:
+```bash
+$ watch / | grep -i chrome
+```
 
 ### License
-Licensed under MIT
+MIT
 
 Copyright (c) 2012-2017 [yuanchuan](https://github.com/yuanchuan)
 
