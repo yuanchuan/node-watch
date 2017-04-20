@@ -16,8 +16,8 @@ npm install node-watch
 ```js
 var watch = require('node-watch');
 
-watch('somedir_or_somefile', { recursive: true }, function(evt, name) {
-  console.log(name, ' changed.');
+watch('file_or_dir', { recursive: true }, function(evt, name) {
+  console.log('%s changed.', name);
 });
 ```
 
@@ -143,12 +143,12 @@ watch('./', filter(/\.js$/, console.log));
 ```js
 #!/usr/bin/env node
 
-/* https://github.com/nodejs/node-v0.x-archive/issues/3211 */
+// https://github.com/nodejs/node-v0.x-archive/issues/3211
 require('epipebomb')();
 
-var watch = require('node-watch');
-var target = process.argv[2] || './';
-var watcher = watch(target, { recursive: true }, console.log);
+var watcher = require('node-watch')(
+  process.argv[2] || './', { recursive: true }, console.log
+);
 
 process.on('SIGINT', watcher.close);
 ```
