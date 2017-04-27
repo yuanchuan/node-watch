@@ -194,6 +194,28 @@ describe('options', function() {
       tree.modify(file2, 200);
     });
 
+    it('should be able to filter with regexp', function(done) {
+      var dir = tree.getPath('home/a');
+      var file1 = 'home/a/file1';
+      var file2 = 'home/a/file2';
+
+      var options = {
+        filter:  /file2/
+      }
+
+      var times = 0;
+      watcher = watch(dir, options, function(evt, name) {
+        times++;
+        if (name == tree.getPath(file2)) {
+          assert(times, 1, 'home/a/file1 should be ignored.');
+          done();
+        }
+      });
+
+      tree.modify(file1);
+      tree.modify(file2, 200);
+    });
+
   });
 });
 
