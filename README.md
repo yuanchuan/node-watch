@@ -83,18 +83,20 @@ watcher.close();
 ```
 
 ### Extra options
-* `filter` Filter files or directories or skip to watch them.
+* `filter <RegExp>`  as a regular expression for filtering with ease
+* `filter <Function>` as a function to filter files
 
 ```js
-var options = {
-  recursive: true,
-  filter : function(name) {
-    return !/node_modules/.test(name);
-  }
-};
+// watch only for json files
+watch('./', { filter: /\.json$/ }, console.log);
 
 // ignore node_modules
-watch('./', options, console.log);
+watch('./', {
+  recursive: true,
+  filter: function(name) {
+    return !/node_modules/.test(name);
+  }
+}, console.log);
 ```
 
 ### Known issues
