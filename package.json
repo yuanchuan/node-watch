@@ -1,5 +1,5 @@
 {
-  "description": "A neat fs.watch wrapper",
+  "description": "A wrapper and enhancements for fs.watch",
   "license": "MIT",
   "name": "node-watch",
   "repository": {
@@ -11,7 +11,7 @@
     "watch",
     "watchfile"
   ],
-  "version": "0.5.2",
+  "version": "0.5.3",
   "bugs": {
     "url": "https://github.com/yuanchuan/node-watch/issues"
   },
