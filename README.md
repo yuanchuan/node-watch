@@ -114,35 +114,7 @@ watch('./', {
 watch(['file1', 'file2'], console.log);
 ```
 
-#### 2. Other ways to filter
-
-*a)* filtering directly inside the callback function:
-
-```js
-watch('./', { recursive: true }, function(evt, name) {
-  // ignore node_modules
-  if (!/node_modules/.test(name)) {
-    // do something
-  }
-});
-```
-
-*b)* filtering with higher order function:
-
-```js
-function filter(pattern, fn) {
-  return function(evt, name) {
-    if (pattern.test(name)) {
-      fn.apply(null, arguments);
-    }
-  }
-}
-
-// watch only for js files
-watch('./', filter(/\.js$/, console.log));
-```
-
-#### 3. customize watch command line tool
+#### 2. customize watch command line tool
 ```js
 #!/usr/bin/env node
 
