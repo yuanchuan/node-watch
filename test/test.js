@@ -18,8 +18,8 @@ after(function() {
 
 
 describe('watch for files', function() {
-
   it('should watch a single file and keep watching', function(done) {
+    this.timeout(3000);
     var times = 1;
     var file = 'home/a/file1';
     var fpath = tree.getPath(file);
@@ -29,9 +29,9 @@ describe('watch for files', function() {
         done();
       }
     });
-    tree.modify(file);
-    tree.modify(file, 400);
-    tree.modify(file, 800);
+    tree.modify(file, 100);
+    tree.modify(file, 500);
+    tree.modify(file, 900);
   });
 
   it('should watch files inside a directory', function(done) {
@@ -161,13 +161,13 @@ describe('options', function() {
       });
 
       tree.modify('home/b/file1', 200);
-      tree.modify('home/node_modules/ma/file1', 200);
+      tree.modify('home/node_modules/ma/file1', 500);
 
       setTimeout(function() {
         assert(!shouldModify, 'watch failed');
         assert(!shouldNotModify, 'fail to ingore path `node_modules`');
         done();
-      }, 600);
+      }, 900);
     });
 
     it('should only report filtered files', function(done) {
@@ -190,8 +190,30 @@ describe('options', function() {
         }
       });
 
-      tree.modify(file1);
-      tree.modify(file2, 200);
+      tree.modify(file1, 200);
+      tree.modify(file2, 400);
+    });
+
+    it('should be able to filter with regexp', function(done) {
+      var dir = tree.getPath('home/a');
+      var file1 = 'home/a/file1';
+      var file2 = 'home/a/file2';
+
+      var options = {
+        filter:  /file2/
+      }
+
+      var times = 0;
+      watcher = watch(dir, options, function(evt, name) {
+        times++;
+        if (name == tree.getPath(file2)) {
+          assert(times, 1, 'home/a/file1 should be ignored.');
+          done();
+        }
+      });
+
+      tree.modify(file1, 200);
+      tree.modify(file2, 400);
     });
 
   });

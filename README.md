@@ -5,13 +5,13 @@ A wrapper and enhancements for [fs.watch](http://nodejs.org/api/fs.html#fs_fs_wa
 [![NPM](https://nodei.co/npm/node-watch.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/node-watch.png/)
 
 
-### Installation
+## Installation
 
 ```bash
 npm install node-watch
 ```
 
-### Example
+## Example
 
 ```js
 var watch = require('node-watch');
@@ -30,7 +30,7 @@ watch('/', { recursive: true }, console.log);
 ```
 
 
-### Why?
+## Why?
 
 * Some editors will generate temporary files which will cause the callback function to be triggered multiple times.
 * When watching a single file the callback function will only be triggered once.
@@ -38,14 +38,15 @@ watch('/', { recursive: true }, console.log);
 * Recursive watch is not supported on Linux or in older versions of nodejs.
 
 
-### Changelog
+## Changelog
 
+* The `filter` option can be of either Function or RegExp type since **v0.5.3**.
 * The `recursive` option is default to be `false` since **v0.5.0**.
 * The callback function will always provide an event name since **v0.5.0**.
 * Returns a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_class_fs_fswatcher) like object since **v0.4.0**.
 
 
-### Events
+## Events
 
 The events provided by the callback function would be either `update` or `remove`.
 
@@ -63,7 +64,7 @@ watch('./', function(evt, name) {
 });
 ```
 
-### Watcher object
+## Watcher object
 
 `watch` function returns a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_class_fs_fswatcher) like object as the same as `fs.watch` (>= v0.4.0).
 
@@ -82,36 +83,38 @@ watcher.on('error', function(err) {
 watcher.close();
 ```
 
-### Extra options
-* `filter` Filter files or directories or skip to watch them.
+## Extra options
+* `filter <RegExp>`  as a regular expression for filtering with ease
+* `filter <Function>` as a function to filter files
 
 ```js
-var options = {
-  recursive: true,
-  filter : function(name) {
-    return !/node_modules/.test(name);
-  }
-};
+// watch only for json files
+watch('./', { filter: /\.json$/ }, console.log);
 
 // ignore node_modules
-watch('./', options, console.log);
+watch('./', {
+  recursive: true,
+  filter: function(name) {
+    return !/node_modules/.test(name);
+  }
+}, console.log);
 ```
 
-### Known issues
+## Known issues
 
 **Windows, node < v4.2.5**
 
   * Failed to detect `remove` event
   * Failed to get deleted filename or directory name
 
-### Misc
+## Misc
 
-##### 1. Watch multiple files or directories in one place
+#### 1. Watch multiple files or directories in one place
 ```js
 watch(['file1', 'file2'], console.log);
 ```
 
-##### 2. Other ways to filter
+#### 2. Other ways to filter
 
 *a)* filtering directly inside the callback function:
 
@@ -139,7 +142,7 @@ function filter(pattern, fn) {
 watch('./', filter(/\.js$/, console.log));
 ```
 
-##### 3. customize watch command line tool
+#### 3. customize watch command line tool
 ```js
 #!/usr/bin/env node
 
@@ -157,7 +160,7 @@ Monitoring chrome from disk:
 $ watch / | grep -i chrome
 ```
 
-### License
+## License
 MIT
 
 Copyright (c) 2012-2017 [yuanchuan](https://github.com/yuanchuan)
