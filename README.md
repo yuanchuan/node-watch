@@ -84,8 +84,7 @@ watcher.close();
 ```
 
 ## Extra options
-* `filter <RegExp>`  as a regular expression for filtering with ease
-* `filter <Function>` as a function to filter files
+* `filter: <RegExp | Function>` filter using regular expression or custom function.
 
 ```js
 // watch only for json files
