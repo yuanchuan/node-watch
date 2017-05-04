@@ -85,14 +85,14 @@ watcher.close();
 // is closed?
 watcher.isClosed()
 ```
-The watcher object is also an instance of [events](https://nodejs.org/dist/latest-v7.x/docs/api/events.html).
+The watcher object is also an instance of [EventEmitter](https://nodejs.org/dist/latest-v7.x/docs/api/events.html#events_class_eventemitter).
 This's a list of methods for watcher specifically:
 
 * `.on`
+* `.once`
 * `.emit`
 * `.close`
 * `.listeners`
-* `.once`
 * `.setMaxListeners`
 * `.getMaxListeners`
 ##### Extra methods
