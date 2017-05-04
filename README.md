@@ -81,9 +81,31 @@ watcher.on('error', function(err) {
 
 // close
 watcher.close();
-```
 
-## Extra options
+// is closed?
+watcher.isClosed()
+```
+The watcher object is also an instance of [events](https://nodejs.org/dist/latest-v7.x/docs/api/events.html).
+This's a list of methods for watcher specifically:
+
+* `.on`
+* `.emit`
+* `.close`
+* `.listeners`
+* `.once`
+* `.setMaxListeners`
+* `.getMaxListeners`
+##### Extra methods
+* `.isClosed` detect if the watcher is closed
+
+## Options
+The usage and options of `node-watch` is compatible with [fs.watch](https://nodejs.org/dist/latest-v7.x/docs/api/fs.html#fs_fs_watch_filename_options_listener)
+* `persistent: <Boolean>` default = **false**
+* `recursive: <Boolean>` default = **true**
+* `encoding: <String>` default = **'utf8'**
+
+
+##### Extra options
 * `filter: <RegExp | Function>` filter using regular expression or custom function.
 
 ```js
@@ -113,7 +135,7 @@ watch('./', {
 watch(['file1', 'file2'], console.log);
 ```
 
-#### 2. customize watch command line tool
+#### 2. Customize watch command line tool
 ```js
 #!/usr/bin/env node
 
