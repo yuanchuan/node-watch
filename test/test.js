@@ -41,24 +41,13 @@ describe('watch for files', function() {
       tree.getPath('home/a/file1'),
       tree.getPath('home/a/file2')
     ];
-    watcher = watch(new Buffer(fpath), function(evt, name) {
+    watcher = watch(fpath, function(evt, name) {
       stack.splice(stack.indexOf(name), 1);
       if (!stack.length) done();
     });
 
     tree.modify('home/a/file1', 200);
     tree.modify('home/a/file2', 300);
-  });
-
-  it('should watch recursively with `recursive: true` option', function(done) {
-    var dir = tree.getPath('home');
-    var file = tree.getPath('home/bb/file1');
-    watcher = watch(dir, { recursive: true }, function(evt, name) {
-      assert.equal(file, name);
-      done();
-    });
-
-    tree.modify('home/bb/file1', 200);
   });
 
   it('should ignore duplicate changes', function(done) {
@@ -140,6 +129,18 @@ describe('events', function() {
 });
 
 describe('options', function() {
+  describe('recursive', function() {
+    it('should watch recursively with `recursive: true` option', function(done) {
+      var dir = tree.getPath('home');
+      var file = tree.getPath('home/bb/file1');
+      watcher = watch(dir, { recursive: true }, function(evt, name) {
+        assert.equal(file, name);
+        done();
+      });
+      tree.modify('home/bb/file1', 200);
+    });
+  });
+
   describe('encoding', function() {
     it('should accept options as an encoding string', function(done) {
       var dir = tree.getPath('home/a');
@@ -254,6 +255,15 @@ describe('parameters', function() {
     } catch(err) {
       done();
     }
+  });
+
+  it('should accept filename as Buffer', function(done) {
+    var fpath = tree.getPath('home/a/file1');
+    watcher = watch(new Buffer(fpath), function(evt, name) {
+      assert(name == fpath);
+      done();
+    });
+    tree.modify('home/a/file1', 100);
   });
 
   it('should compose array of files or directories', function(done) {
