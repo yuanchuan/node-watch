@@ -53,15 +53,39 @@ The events provided by the callback function would be either `update` or `remove
 ```js
 watch('./', function(evt, name) {
 
-  if (evt == 'remove') {
-    // on delete
-  }
-
   if (evt == 'update') {
     // on create or modify
   }
 
+  if (evt == 'remove') {
+    // on delete
+  }
+
 });
+```
+
+## Options
+
+The usage and options of `node-watch` is compatible with [fs.watch](https://nodejs.org/dist/latest-v7.x/docs/api/fs.html#fs_fs_watch_filename_options_listener).
+* `persistent: <Boolean>` default = **true**
+* `recursive: <Boolean>` default = **false**
+* `encoding: <String>` default = **'utf8'**
+
+##### Extra options
+
+* `filter: <RegExp | Function>` filter using regular expression or custom function.
+
+```js
+// watch only for json files
+watch('./', { filter: /\.json$/ }, console.log);
+
+// ignore node_modules
+watch('./', {
+  recursive: true,
+  filter: function(name) {
+    return !/node_modules/.test(name);
+  }
+}, console.log);
 ```
 
 ## Watcher object
@@ -98,28 +122,6 @@ This's a list of methods for watcher specifically:
 ##### Extra methods
 * `.isClosed` detect if the watcher is closed
 
-## Options
-The usage and options of `node-watch` is compatible with [fs.watch](https://nodejs.org/dist/latest-v7.x/docs/api/fs.html#fs_fs_watch_filename_options_listener)
-* `persistent: <Boolean>` default = **false**
-* `recursive: <Boolean>` default = **true**
-* `encoding: <String>` default = **'utf8'**
-
-
-##### Extra options
-* `filter: <RegExp | Function>` filter using regular expression or custom function.
-
-```js
-// watch only for json files
-watch('./', { filter: /\.json$/ }, console.log);
-
-// ignore node_modules
-watch('./', {
-  recursive: true,
-  filter: function(name) {
-    return !/node_modules/.test(name);
-  }
-}, console.log);
-```
 
 ## Known issues
 
