@@ -111,6 +111,7 @@ This's a list of methods for watcher specifically:
 * `.listeners`
 * `.setMaxListeners`
 * `.getMaxListeners`
+
 ##### Extra methods
 * `.isClosed` detect if the watcher is closed
 
