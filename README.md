@@ -40,7 +40,7 @@ watch('/', { recursive: true }, console.log);
 
 ## Events
 
-The events provided by the callback function would be either `update` or `remove`.
+The events provided by the callback function is either `update` or `remove`, which is less confusing to `fs.watch`'s `rename` and `change`.
 
 ```js
 watch('./', function(evt, name) {
@@ -58,7 +58,7 @@ watch('./', function(evt, name) {
 
 ## Options
 
-The usage and options of `node-watch` is compatible with [fs.watch](https://nodejs.org/dist/latest-v7.x/docs/api/fs.html#fs_fs_watch_filename_options_listener).
+The usage and options of `node-watch` is fully compatible with [fs.watch](https://nodejs.org/dist/latest-v7.x/docs/api/fs.html#fs_fs_watch_filename_options_listener).
 * `persistent: <Boolean>` default = **true**
 * `recursive: <Boolean>` default = **false**
 * `encoding: <String>` default = **'utf8'**
@@ -82,7 +82,7 @@ watch('./', {
 
 ## Watcher object
 
-`node-watch` returns a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_class_fs_fswatcher) like object as the same as `fs.watch` (>= v0.4.0).
+The watch function returns a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_class_fs_fswatcher) like object as the same as `fs.watch` (>= v0.4.0).
 
 ```js
 var watcher = watch('./', { recursive: true });
