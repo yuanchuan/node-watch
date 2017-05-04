@@ -38,52 +38,33 @@ watch('/', { recursive: true }, console.log);
 * Recursive watch is not supported on Linux or in older versions of nodejs.
 
 
-## Changelog
-
-* The `filter` option can be of either Function or RegExp type since **v0.5.3**.
-* The `recursive` option is default to be `false` since **v0.5.0**.
-* The callback function will always provide an event name since **v0.5.0**.
-* Returns a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_class_fs_fswatcher) like object since **v0.4.0**.
-
-
 ## Events
 
-The events provided by the callback function would be either `update` or `remove`.
+The events provided by the callback function is either `update` or `remove`, which is less confusing to `fs.watch`'s `rename` and `change`.
 
 ```js
 watch('./', function(evt, name) {
-
-  if (evt == 'remove') {
-    // on delete
-  }
 
   if (evt == 'update') {
     // on create or modify
   }
 
+  if (evt == 'remove') {
+    // on delete
+  }
+
 });
 ```
 
-## Watcher object
+## Options
 
-`watch` function returns a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_class_fs_fswatcher) like object as the same as `fs.watch` (>= v0.4.0).
+The usage and options of `node-watch` is fully compatible with [fs.watch](https://nodejs.org/dist/latest-v7.x/docs/api/fs.html#fs_fs_watch_filename_options_listener).
+* `persistent: <Boolean>` default = **true**
+* `recursive: <Boolean>` default = **false**
+* `encoding: <String>` default = **'utf8'**
 
-```js
-var watcher = watch('./', { recursive: true });
+##### Extra options
 
-watcher.on('change', function(evt, name) {
-  // callback
-});
-
-watcher.on('error', function(err) {
-  // handle error
-});
-
-// close
-watcher.close();
-```
-
-## Extra options
 * `filter: <RegExp | Function>` filter using regular expression or custom function.
 
 ```js
@@ -99,6 +80,41 @@ watch('./', {
 }, console.log);
 ```
 
+## Watcher object
+
+The watch function returns a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_class_fs_fswatcher) like object as the same as `fs.watch` (>= v0.4.0).
+
+```js
+var watcher = watch('./', { recursive: true });
+
+watcher.on('change', function(evt, name) {
+  // callback
+});
+
+watcher.on('error', function(err) {
+  // handle error
+});
+
+// close
+watcher.close();
+
+// is closed?
+watcher.isClosed()
+```
+The watcher object is also an instance of [EventEmitter](https://nodejs.org/dist/latest-v7.x/docs/api/events.html#events_class_eventemitter).
+This's a list of methods for watcher specifically:
+
+* `.on`
+* `.once`
+* `.emit`
+* `.close`
+* `.listeners`
+* `.setMaxListeners`
+* `.getMaxListeners`
+##### Extra methods
+* `.isClosed` detect if the watcher is closed
+
+
 ## Known issues
 
 **Windows, node < v4.2.5**
@@ -113,7 +129,7 @@ watch('./', {
 watch(['file1', 'file2'], console.log);
 ```
 
-#### 2. customize watch command line tool
+#### 2. Customize watch command line tool
 ```js
 #!/usr/bin/env node
 

@@ -41,7 +41,7 @@ describe('watch for files', function() {
       tree.getPath('home/a/file1'),
       tree.getPath('home/a/file2')
     ];
-    watcher = watch(fpath, function(evt, name) {
+    watcher = watch(new Buffer(fpath), function(evt, name) {
       stack.splice(stack.indexOf(name), 1);
       if (!stack.length) done();
     });
@@ -140,6 +140,31 @@ describe('events', function() {
 });
 
 describe('options', function() {
+  describe('encoding', function() {
+    it('should accept options as an encoding string', function(done) {
+      var dir = tree.getPath('home/a');
+      var file = 'home/a/file1';
+      var fpath = tree.getPath(file);
+      watcher = watch(dir, 'utf8', function(evt, name) {
+        assert(name.toString() === fpath);
+        done();
+      });
+      tree.modify(file, 200);
+    });
+
+    it('should support buffer encoding', function(done) {
+      var dir = tree.getPath('home/a');
+      var file = 'home/a/file1';
+      var fpath = tree.getPath(file);
+      watcher = watch(dir, 'buffer', function(evt, name) {
+        assert(Buffer.isBuffer(name), 'not a Buffer')
+        assert(name.toString() === fpath);
+        done();
+      });
+      tree.modify(file, 200);
+    });
+  });
+
   describe('filter', function() {
     it('should only watch filtered directories', function(done) {
       var shouldModify = true;
@@ -282,7 +307,7 @@ describe('watcher object', function() {
     tree.modify(file);
     tree.modify(file, 300);
     setTimeout(function() {
-      assert(watcher.isClosed() === true);
+      assert(watcher.isClosed(), 'watcher should be closed');
       assert(times === 0, 'failed to close the watcher');
       done();
     }, 400);
