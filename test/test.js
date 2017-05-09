@@ -164,6 +164,34 @@ describe('options', function() {
       });
       tree.modify(file, 200);
     });
+
+    it('should support base64 encoding', function(done) {
+      var dir = tree.getPath('home/a');
+      var file = 'home/a/file1';
+      var fpath = tree.getPath(file);
+      watcher = watch(dir, 'base64', function(evt, name) {
+        assert(
+          name === (Buffer.from ? Buffer.from(fpath) : new Buffer(fpath)).toString('base64'),
+          'wrong base64 encoding'
+        );
+        done();
+      });
+      tree.modify(file, 200);
+    });
+
+    it('should support hex encoding', function(done) {
+      var dir = tree.getPath('home/a');
+      var file = 'home/a/file1';
+      var fpath = tree.getPath(file);
+      watcher = watch(dir, 'hex', function(evt, name) {
+        assert(
+          name === (Buffer.from ? Buffer.from(fpath) : new Buffer(fpath)).toString('hex'),
+          'wrong hex encoding'
+        );
+        done();
+      });
+      tree.modify(file, 200);
+    });
   });
 
   describe('filter', function() {
