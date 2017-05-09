@@ -142,6 +142,15 @@ describe('options', function() {
   });
 
   describe('encoding', function() {
+    it('should shoud throw on invalid encoding', function(done) {
+      var dir = tree.getPath('home/a');
+      try {
+        watcher = watch(dir, 'unknown');
+      } catch (e) {
+        done();
+      }
+    });
+
     it('should accept options as an encoding string', function(done) {
       var dir = tree.getPath('home/a');
       var file = 'home/a/file1';
