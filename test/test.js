@@ -90,11 +90,10 @@ describe('watch for directoies', function() {
         done();
       }
     });
-    tree.newFile('home/new/file1', 100);
-    tree.modify('home/new/file1', 400);
+    tree.newFile('home/new/file1', 200);
+    tree.modify('home/new/file1', 500);
   });
 });
-
 
 describe('events', function() {
   it('should identify `remove` event', function(done) {
