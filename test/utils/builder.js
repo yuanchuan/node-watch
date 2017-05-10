@@ -83,8 +83,11 @@ module.exports = function builder() {
         fs.removeSync(filePath);
       }, delay || 0);
     },
-    newFile: function(fpath) {
-      fs.ensureFileSync(this.getPath(fpath));
+    newFile: function(fpath, delay) {
+      var filePath = this.getPath(fpath);
+      setTimeout(function() {
+        fs.ensureFileSync(filePath);
+      }, delay || 0)
     },
     newSymLink: function(src, dist) {
       fs.ensureSymlinkSync(
@@ -92,8 +95,11 @@ module.exports = function builder() {
         this.getPath(dist)
       );
     },
-    newDir: function(fpath) {
-      fs.ensureDirSync(this.getPath(fpath));
+    newDir: function(fpath, delay) {
+      var filePath = this.getPath(fpath);
+      setTimeout(function() {
+        fs.ensureDirSync(filePath);
+      }, delay || 0);
     },
     cleanup: function() {
       try {

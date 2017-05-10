@@ -85,13 +85,13 @@ describe('watch for directoies', function() {
 
   it('should watch new created directories', function(done) {
     var home = tree.getPath('home');
-    tree.newFile('home/new/file1');
     watcher = watch(home, { recursive: true }, function(evt, name) {
       if (name == tree.getPath('home/new/file1')) {
         done();
       }
     });
-    tree.modify('home/new/file1', 200);
+    tree.newFile('home/new/file1', 100);
+    tree.modify('home/new/file1', 400);
   });
 });
 
@@ -141,7 +141,7 @@ describe('options', function() {
   });
 
   describe('encoding', function() {
-    it('should shoud throw on invalid encoding', function(done) {
+    it('should throw on invalid encoding', function(done) {
       var dir = tree.getPath('home/a');
       try {
         watcher = watch(dir, 'unknown');
