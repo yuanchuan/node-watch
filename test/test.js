@@ -90,12 +90,10 @@ describe('watch for directoies', function() {
         done();
       }
     });
-
-    tree.newFile('home/new/file1');
+    tree.newFile('home/new/file1', 200);
     tree.modify('home/new/file1', 500);
   });
 });
-
 
 describe('events', function() {
   it('should identify `remove` event', function(done) {
@@ -142,6 +140,15 @@ describe('options', function() {
   });
 
   describe('encoding', function() {
+    it('should throw on invalid encoding', function(done) {
+      var dir = tree.getPath('home/a');
+      try {
+        watcher = watch(dir, 'unknown');
+      } catch (e) {
+        done();
+      }
+    });
+
     it('should accept options as an encoding string', function(done) {
       var dir = tree.getPath('home/a');
       var file = 'home/a/file1';
@@ -160,6 +167,34 @@ describe('options', function() {
       watcher = watch(dir, 'buffer', function(evt, name) {
         assert(Buffer.isBuffer(name), 'not a Buffer')
         assert(name.toString() === fpath);
+        done();
+      });
+      tree.modify(file, 200);
+    });
+
+    it('should support base64 encoding', function(done) {
+      var dir = tree.getPath('home/a');
+      var file = 'home/a/file1';
+      var fpath = tree.getPath(file);
+      watcher = watch(dir, 'base64', function(evt, name) {
+        assert(
+          name === (Buffer.from ? Buffer.from(fpath) : new Buffer(fpath)).toString('base64'),
+          'wrong base64 encoding'
+        );
+        done();
+      });
+      tree.modify(file, 200);
+    });
+
+    it('should support hex encoding', function(done) {
+      var dir = tree.getPath('home/a');
+      var file = 'home/a/file1';
+      var fpath = tree.getPath(file);
+      watcher = watch(dir, 'hex', function(evt, name) {
+        assert(
+          name === (Buffer.from ? Buffer.from(fpath) : new Buffer(fpath)).toString('hex'),
+          'wrong hex encoding'
+        );
         done();
       });
       tree.modify(file, 200);
