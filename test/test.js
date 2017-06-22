@@ -319,7 +319,7 @@ describe('parameters', function() {
     tree.modify(file2);
   });
 
-  it('should filter duplicate events for composed watcher', function(done) {
+  it.only('should filter duplicate events for composed watcher', function(done) {
     var file1 = 'home';
     var file2 = 'home/a';
     var file3 = 'home/a/file2';
@@ -330,14 +330,14 @@ describe('parameters', function() {
     ];
 
     times = 0;
-    watcher = watch(fpaths, function(evt, name) {
+    watcher = watch(fpaths, { recursive: true }, function(evt, name) {
       if (fpaths.indexOf(name) !== -1) times++;
       setTimeout(function() {
         if (times == 1) done();
-      }, 100);
+      }, 200);
     });
 
-    tree.modify(file3);
+    tree.modify(file3, 100);
   });
 
 });
