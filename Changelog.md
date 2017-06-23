@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.5
+* Remove duplicate events from a composed watcher.
+
 ## 0.5.4
 * Accept Buffer filename.
 * Add support for `encoding` option.
