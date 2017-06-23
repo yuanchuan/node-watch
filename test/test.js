@@ -336,15 +336,15 @@ describe('parameters', function() {
       changed.push(name);
     });
 
-    tree.newFile(newFile, 100);
-    tree.modify(file3, 200);
+    tree.modify(file3, 100);
+    tree.newFile(newFile, 200);
 
     setTimeout(function() {
-      assert(changed.length == 2);
-      assert(changed.indexOf(tree.getPath(file3)) != -1)
-      assert(changed.indexOf(tree.getPath(newFile)) != -1)
+      assert(changed.length == 2, 'should log extactly 2 events');
+      assert(~changed.indexOf(tree.getPath(file3)), 'should include ' + file3);
+      assert(~changed.indexOf(tree.getPath(newFile)), 'should include ' + newFile);
       done();
-    }, 400);
+    }, 600);
   });
 
 });
