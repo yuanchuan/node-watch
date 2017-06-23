@@ -90,7 +90,7 @@ describe('watch for directoies', function() {
         done();
       }
     });
-    tree.newFile('home/new/file1', 200);
+    tree.newFile('home/new/file1', 100);
     tree.modify('home/new/file1', 500);
   });
 });
@@ -317,6 +317,34 @@ describe('parameters', function() {
 
     tree.modify(file1);
     tree.modify(file2);
+  });
+
+  it('should filter duplicate events for composed watcher', function(done) {
+    var file1 = 'home';
+    var file2 = 'home/a';
+    var file3 = 'home/a/file2';
+    var newFile = 'home/a/newfile';
+    var fpaths = [
+      tree.getPath(file1),
+      tree.getPath(file2),
+      tree.getPath(file3)
+    ];
+
+    var changed = [];
+
+    watcher = watch(fpaths, { recursive: true }, function(evt, name) {
+      changed.push(name);
+    });
+
+    tree.modify(file3, 100);
+    tree.newFile(newFile, 200);
+
+    setTimeout(function() {
+      assert(changed.length == 2, 'should log extactly 2 events');
+      assert(~changed.indexOf(tree.getPath(file3)), 'should include ' + file3);
+      assert(~changed.indexOf(tree.getPath(newFile)), 'should include ' + newFile);
+      done();
+    }, 600);
   });
 
 });
