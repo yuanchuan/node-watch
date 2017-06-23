@@ -319,25 +319,32 @@ describe('parameters', function() {
     tree.modify(file2);
   });
 
-  it.only('should filter duplicate events for composed watcher', function(done) {
+  it('should filter duplicate events for composed watcher', function(done) {
     var file1 = 'home';
     var file2 = 'home/a';
     var file3 = 'home/a/file2';
+    var newFile = 'home/a/newfile';
     var fpaths = [
       tree.getPath(file1),
       tree.getPath(file2),
       tree.getPath(file3)
     ];
 
-    times = 0;
+    var changed = [];
+
     watcher = watch(fpaths, { recursive: true }, function(evt, name) {
-      if (fpaths.indexOf(name) !== -1) times++;
-      setTimeout(function() {
-        if (times == 1) done();
-      }, 200);
+      changed.push(name);
     });
 
-    tree.modify(file3, 100);
+    tree.newFile(newFile, 100);
+    tree.modify(file3, 200);
+
+    setTimeout(function() {
+      assert(changed.length == 2);
+      assert(changed.indexOf(tree.getPath(file3)) != -1)
+      assert(changed.indexOf(tree.getPath(newFile)) != -1)
+      done();
+    }, 400);
   });
 
 });
