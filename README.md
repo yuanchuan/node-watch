@@ -21,10 +21,9 @@ watch('file_or_dir', { recursive: true }, function(evt, name) {
 });
 ```
 
-This is a completely rewritten version, **much faster** and in a more **memory-efficient** way.
-So with recent nodejs under OS X or Windows you can do something like this:
+It's fast to watch **deep** directories on macOS and Windows, since the `recursive` option is supported natively except on Linux.
 
-```js
+```
 // watch the whole disk
 watch('/', { recursive: true }, console.log);
 ```
@@ -36,11 +35,33 @@ watch('/', { recursive: true }, console.log);
 * When watching a single file the callback function will only be triggered once.
 * <del>Missing an option to watch a directory recursively.</del>
 * Recursive watch is not supported on Linux or in older versions of nodejs.
+* Keep it simple, stupid.
 
+
+## Options
+
+The usage and options of `node-watch` are compatible with [fs.watch](https://nodejs.org/dist/latest-v7.x/docs/api/fs.html#fs_fs_watch_filename_options_listener).
+* `persistent: Boolean` (default **true**)
+* `recursive: Boolean` (default **false**)
+* `encoding: String` (default **'utf8'**)
+
+**Extra options**
+
+* `filter: RegExp | Function`
+
+   Return that matches the filter expression.
+
+    ```
+    // filter with regular expression
+    watch('./', { filter: /\.json$/ });
+
+    // filter with custom function
+    watch('./', { filter: f => !/node_modules/.test(f) });
+    ```
 
 ## Events
 
-The events provided by the callback function is either `update` or `remove`, which is less confusing to `fs.watch`'s `rename` and `change`.
+The events provided by the callback function is either `update` or `remove`, which is less confusing to `fs.watch`'s `rename` or `change`.
 
 ```js
 watch('./', function(evt, name) {
@@ -56,29 +77,6 @@ watch('./', function(evt, name) {
 });
 ```
 
-## Options
-
-The usage and options of `node-watch` is fully compatible with [fs.watch](https://nodejs.org/dist/latest-v7.x/docs/api/fs.html#fs_fs_watch_filename_options_listener).
-* `persistent: <Boolean>` default = **true**
-* `recursive: <Boolean>` default = **false**
-* `encoding: <String>` default = **'utf8'**
-
-##### Extra options
-
-* `filter: <RegExp | Function>` filter using regular expression or custom function.
-
-```js
-// watch only for json files
-watch('./', { filter: /\.json$/ }, console.log);
-
-// ignore node_modules
-watch('./', {
-  recursive: true,
-  filter: function(name) {
-    return !/node_modules/.test(name);
-  }
-}, console.log);
-```
 
 ## Watcher object
 
@@ -101,8 +99,8 @@ watcher.close();
 // is closed?
 watcher.isClosed()
 ```
-The watcher object is also an instance of [EventEmitter](https://nodejs.org/dist/latest-v7.x/docs/api/events.html#events_class_eventemitter).
-This's a list of methods for watcher specifically:
+
+#### List of methods
 
 * `.on`
 * `.once`
@@ -152,4 +150,3 @@ $ watch / | grep -i chrome
 MIT
 
 Copyright (c) 2012-2017 [yuanchuan](https://github.com/yuanchuan)
-
