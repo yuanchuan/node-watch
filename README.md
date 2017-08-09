@@ -1,6 +1,6 @@
 # node-watch [![Status](https://travis-ci.org/yuanchuan/node-watch.svg?branch=master)](https://travis-ci.org/yuanchuan/node-watch "See test builds")
 
-A wrapper and enhancements for [fs.watch](http://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener) (with 0 dependencies).
+A wrapper and enhancements for [fs.watch](http://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener).
 
 [![NPM](https://nodei.co/npm/node-watch.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/node-watch.png/)
 
@@ -21,9 +21,9 @@ watch('file_or_dir', { recursive: true }, function(evt, name) {
 });
 ```
 
-It's fast to watch **deep** directories on macOS and Windows, since the `recursive` option is supported natively except on Linux.
+Now it's fast to watch **deep** directories on macOS and Windows, since the `recursive` option is natively supported except on Linux.
 
-```
+```js
 // watch the whole disk
 watch('/', { recursive: true }, console.log);
 ```
@@ -32,7 +32,7 @@ watch('/', { recursive: true }, console.log);
 ## Why?
 
 * Some editors will generate temporary files which will cause the callback function to be triggered multiple times.
-* When watching a single file the callback function will only be triggered once.
+* The callback function will only be triggered once on watching a single file.
 * <del>Missing an option to watch a directory recursively.</del>
 * Recursive watch is not supported on Linux or in older versions of nodejs.
 * Keep it simple, stupid.
@@ -51,7 +51,7 @@ The usage and options of `node-watch` are compatible with [fs.watch](https://nod
 
    Return that matches the filter expression.
 
-    ```
+    ```js
     // filter with regular expression
     watch('./', { filter: /\.json$/ });
 
@@ -145,6 +145,12 @@ Monitoring chrome from disk:
 ```bash
 $ watch / | grep -i chrome
 ```
+
+## Alternatives
+
+* [chokidar](https://github.com/paulmillr/chokidar)
+* [gaze](https://github.com/shama/gaze)
+* [mikeal/watch](https://github.com/mikeal/watch)
 
 ## License
 MIT
