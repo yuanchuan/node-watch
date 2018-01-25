@@ -9,7 +9,10 @@ home/
   bb/
     file1
     file2
-  node_modules/
+  d/
+    file1
+    file2
+  deep_node_modules/
     ma/
       file1
       file2
