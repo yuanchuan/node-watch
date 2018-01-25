@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.5.6
-* Fix recursive watch on Linux
+* Fix recursive watch with filter option.
 
 ## 0.5.5
 * Remove duplicate events from a composed watcher.

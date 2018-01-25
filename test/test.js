@@ -268,7 +268,6 @@ describe('options', function() {
 
       var times = 0;
       watcher = watch(dir, options, function(evt, name) {
-        console.log(name);
         times++;
         if (name == tree.getPath(file2)) {
           assert(times, 1, 'home/a/file1 should be ignored.');
