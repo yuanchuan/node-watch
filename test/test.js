@@ -130,12 +130,12 @@ describe('options', function() {
   describe('recursive', function() {
     it('should watch recursively with `recursive: true` option', function(done) {
       var dir = tree.getPath('home');
-      var file = tree.getPath('home/bb/file1');
+      var file = tree.getPath('home/d/file1');
       watcher = watch(dir, { recursive: true }, function(evt, name) {
         assert.equal(file, name);
         done();
       });
-      tree.modify('home/bb/file1', 200);
+      tree.modify('home/d/file1', 1000);
     });
   });
 
@@ -209,12 +209,12 @@ describe('options', function() {
       var option = {
         recursive: true,
         filter: function(name) {
-          return !/node_modules/.test(name);
+          return !/deep_node_modules/.test(name);
         }
       };
 
       watcher = watch(tree.getPath('home'), option, function(evt, name) {
-        if (/node_modules/.test(name)) {
+        if (/deep_node_modules/.test(name)) {
           shouldNotModify = true;
         } else {
           shouldModify = false;
@@ -222,21 +222,22 @@ describe('options', function() {
       });
 
       tree.modify('home/b/file1', 200);
-      tree.modify('home/node_modules/ma/file1', 500);
+      tree.modify('home/deep_node_modules/ma/file1', 500);
 
       setTimeout(function() {
         assert(!shouldModify, 'watch failed');
-        assert(!shouldNotModify, 'fail to ingore path `node_modules`');
+        assert(!shouldNotModify, 'fail to ingore path `deep_node_modules`');
         done();
       }, 900);
     });
 
     it('should only report filtered files', function(done) {
-      var dir = tree.getPath('home/a');
+      var dir = tree.getPath('home');
       var file1 = 'home/a/file1';
       var file2 = 'home/a/file2';
 
       var options = {
+        recursive: true,
         filter: function(name) {
           return !/file1/.test(name);
         }
@@ -256,11 +257,12 @@ describe('options', function() {
     });
 
     it('should be able to filter with regexp', function(done) {
-      var dir = tree.getPath('home/a');
+      var dir = tree.getPath('home');
       var file1 = 'home/a/file1';
       var file2 = 'home/a/file2';
 
       var options = {
+        recursive: true,
         filter:  /file2/
       }
 
