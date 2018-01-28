@@ -130,12 +130,12 @@ describe('options', function() {
   describe('recursive', function() {
     it('should watch recursively with `recursive: true` option', function(done) {
       var dir = tree.getPath('home');
-      var file = tree.getPath('home/d/file1');
+      var file = tree.getPath('home/bb/file1');
       watcher = watch(dir, { recursive: true }, function(evt, name) {
         assert.equal(file, name);
         done();
       });
-      tree.modify('home/d/file1', 1000);
+      tree.modify('home/bb/file1', 300);
     });
   });
 
@@ -233,8 +233,8 @@ describe('options', function() {
 
     it('should only report filtered files', function(done) {
       var dir = tree.getPath('home');
-      var file1 = 'home/a/file1';
-      var file2 = 'home/a/file2';
+      var file1 = 'home/bb/file1';
+      var file2 = 'home/bb/file2';
 
       var options = {
         recursive: true,
@@ -247,7 +247,7 @@ describe('options', function() {
       watcher = watch(dir, options, function(evt, name) {
         times++;
         if (name == tree.getPath(file2)) {
-          assert(times, 1, 'home/a/file1 should be ignored.');
+          assert(times, 1, 'home/bb/file1 should be ignored.');
           done();
         }
       });
@@ -258,8 +258,8 @@ describe('options', function() {
 
     it('should be able to filter with regexp', function(done) {
       var dir = tree.getPath('home');
-      var file1 = 'home/a/file1';
-      var file2 = 'home/a/file2';
+      var file1 = 'home/bb/file1';
+      var file2 = 'home/bb/file2';
 
       var options = {
         recursive: true,
@@ -270,7 +270,7 @@ describe('options', function() {
       watcher = watch(dir, options, function(evt, name) {
         times++;
         if (name == tree.getPath(file2)) {
-          assert(times, 1, 'home/a/file1 should be ignored.');
+          assert(times, 1, 'home/bb/file1 should be ignored.');
           done();
         }
       });

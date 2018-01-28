@@ -121,6 +121,10 @@ watcher.isClosed()
   * Failed to detect `remove` event
   * Failed to get deleted filename or directory name
 
+**MacOS, node 0.10.x**
+  * Will emit double event if the directory name is of one single character.
+
+
 ## Misc
 
 #### 1. Watch multiple files or directories in one place
@@ -145,6 +149,14 @@ Monitoring chrome from disk:
 ```bash
 $ watch / | grep -i chrome
 ```
+
+#### 3. Got ENOSPC error?
+
+If you get ENOSPC error, but you actually have free disk space - it means that your OS watcher limit is too low and you probably want to recursively watch a big tree of files.
+
+Follow this description to increase the limit:
+[https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit](https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit)
+
 
 ## Alternatives
 
