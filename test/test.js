@@ -278,8 +278,25 @@ describe('options', function() {
       tree.modify(file1, 200);
       tree.modify(file2, 400);
     });
-
   });
+
+  describe('delay', function() {
+    it('should have delayed response', function(done) {
+      var dir = tree.getPath('home/a');
+      var file = 'home/a/file1';
+      var fpath = tree.getPath(file);
+      var start;
+      watcher = watch(dir, { delay: 1000 }, function(evt, name) {
+        assert(Date.now() - start > 1000, 'delay not working');
+        done();
+      });
+      setTimeout(function() {
+        tree.modify(file);
+        start = Date.now();
+      }, 200);
+    });
+  });
+
 });
 
 
