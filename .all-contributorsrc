@@ -1,0 +1,79 @@
+{
+  "projectName": "node-watch",
+  "projectOwner": "yuanchuan",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 50,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "yuanchuan",
+      "name": "Yuan Chuan",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/250426?v=4",
+      "profile": "http://yuanchuan.name",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "xdissent",
+      "name": "Greg Thornton",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/99367?v=4",
+      "profile": "http://xdissent.com",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
+    },
+    {
+      "login": "amir-arad",
+      "name": "Amir Arad",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/6019373?v=4",
+      "profile": "https://github.com/amir-arad",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "garyb",
+      "name": "Gary Burgess",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/693642?v=4",
+      "profile": "http://slipthrough.net",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "pdehaan",
+      "name": "Peter deHaan",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/557895?v=4",
+      "profile": "http://about.me/peterdehaan",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "kcliu",
+      "name": "kcliu",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/161968?v=4",
+      "profile": "https://medium.com/@kcliu",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "shreeve",
+      "name": "Steve Shreeve",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/142875?v=4",
+      "profile": "https://github.com/shreeve",
+      "contributions": [
+        "code"
+      ]
+    }
+  ]
+}

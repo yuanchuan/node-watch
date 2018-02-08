@@ -172,7 +172,20 @@ Follow this description to increase the limit:
 * [gaze](https://github.com/shama/gaze)
 * [mikeal/watch](https://github.com/mikeal/watch)
 
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+| [<img src="https://avatars1.githubusercontent.com/u/250426?v=4" width="50px;"/><br /><sub><b>Yuan Chuan</b></sub>](http://yuanchuan.name)<br />[💻](https://github.com/yuanchuan/node-watch/commits?author=yuanchuan "Code") [📖](https://github.com/yuanchuan/node-watch/commits?author=yuanchuan "Documentation") [⚠️](https://github.com/yuanchuan/node-watch/commits?author=yuanchuan "Tests") | [<img src="https://avatars2.githubusercontent.com/u/99367?v=4" width="50px;"/><br /><sub><b>Greg Thornton</b></sub>](http://xdissent.com)<br />[💻](https://github.com/yuanchuan/node-watch/commits?author=xdissent "Code") [🤔](#ideas-xdissent "Ideas, Planning, & Feedback") | [<img src="https://avatars1.githubusercontent.com/u/6019373?v=4" width="50px;"/><br /><sub><b>Amir Arad</b></sub>](https://github.com/amir-arad)<br />[💻](https://github.com/yuanchuan/node-watch/commits?author=amir-arad "Code") [📖](https://github.com/yuanchuan/node-watch/commits?author=amir-arad "Documentation") [⚠️](https://github.com/yuanchuan/node-watch/commits?author=amir-arad "Tests") | [<img src="https://avatars0.githubusercontent.com/u/693642?v=4" width="50px;"/><br /><sub><b>Gary Burgess</b></sub>](http://slipthrough.net)<br />[💻](https://github.com/yuanchuan/node-watch/commits?author=garyb "Code") | [<img src="https://avatars2.githubusercontent.com/u/557895?v=4" width="50px;"/><br /><sub><b>Peter deHaan</b></sub>](http://about.me/peterdehaan)<br />[💻](https://github.com/yuanchuan/node-watch/commits?author=pdehaan "Code") | [<img src="https://avatars2.githubusercontent.com/u/161968?v=4" width="50px;"/><br /><sub><b>kcliu</b></sub>](https://medium.com/@kcliu)<br />[💻](https://github.com/yuanchuan/node-watch/commits?author=kcliu "Code") | [<img src="https://avatars3.githubusercontent.com/u/142875?v=4" width="50px;"/><br /><sub><b>Steve Shreeve</b></sub>](https://github.com/shreeve)<br />[💻](https://github.com/yuanchuan/node-watch/commits?author=shreeve "Code") |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
+
+
 ## License
 MIT
 
-Copyright (c) 2012-2017 [yuanchuan](https://github.com/yuanchuan)
+Copyright (c) 2012-2018 [yuanchuan](https://github.com/yuanchuan)
