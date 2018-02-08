@@ -58,9 +58,9 @@ The usage and options of `node-watch` are compatible with [fs.watch](https://nod
     // filter with custom function
     watch('./', { filter: f => !/node_modules/.test(f) });
     ```
-* `delay: Number` (in ms, default **200**)
+* `delay: Number` (in ms, default **100**)
 
-   Delay time of the callback function, should be **>= 200**.
+   Delay time of the callback function.
 
    ```js
    // log after 5 seconds
