@@ -61,9 +61,9 @@ describe('watch for files', function() {
         done();
       }, 200);
     });
-    tree.modify(file);
-    tree.modify(file);
-    tree.modify(file);
+    tree.modify(file, 100);
+    tree.modify(file, 120);
+    tree.modify(file, 150);
   });
 
 });
@@ -90,7 +90,7 @@ describe('watch for directoies', function() {
         done();
       }
     });
-    tree.newFile('home/new/file1', 100);
+    tree.newFile('home/new/file1', 200);
     tree.modify('home/new/file1', 500);
   });
 });
@@ -334,8 +334,8 @@ describe('parameters', function() {
       if (times >= 2) done();
     });
 
-    tree.modify(file1);
-    tree.modify(file2);
+    tree.modify(file1, 100);
+    tree.modify(file2, 150);
   });
 
   it('should filter duplicate events for composed watcher', function(done) {
