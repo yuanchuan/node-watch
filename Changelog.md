@@ -1,7 +1,10 @@
 # Changelog
 
+## 0.5.8
+* Fix async function detection.
+
 ## 0.5.7
-* add `delay` option and set default to 100ms.
+* Add `delay` option and set default to 100ms.
 
 ## 0.5.6
 * Fix recursive watch with filter option.
