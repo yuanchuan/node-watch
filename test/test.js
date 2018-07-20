@@ -8,7 +8,7 @@ var watcher;
 
 beforeEach(function(done) {
   tree = Tree();
-  if (watcher) watcher.close();
+  if (watcher && !watcher.isClosed()) watcher.close();
   setTimeout(done, 500);
 });
 
@@ -112,6 +112,16 @@ describe('events', function() {
       if (evt == 'update' && name == fpath) done();
     });
     tree.modify(file, 100);
+  });
+
+  it('should emit `close` event', function(done) {
+    var file = 'home/a/file1';
+    var fpath = tree.getPath(file);
+    watcher = watch(fpath, function() {});
+    watcher.on('close', function() {
+      done();
+    });
+    watcher.close();
   });
 
   it('should report `update` on new files', function(done) {
@@ -331,7 +341,7 @@ describe('parameters', function() {
     times = 0;
     watcher = watch(fpaths, function(evt, name) {
       if (fpaths.indexOf(name) !== -1) times++;
-      if (times >= 2) done();
+      if (times == 2) done();  // calling done more than twice causes mocha test to fail
     });
 
     tree.modify(file1, 100);
@@ -342,7 +352,7 @@ describe('parameters', function() {
     var file1 = 'home';
     var file2 = 'home/a';
     var file3 = 'home/a/file2';
-    var newFile = 'home/a/newfile';
+    var newFile = 'home/a/newfile' + Date.now();
     var fpaths = [
       tree.getPath(file1),
       tree.getPath(file2),
@@ -359,7 +369,7 @@ describe('parameters', function() {
     tree.newFile(newFile, 200);
 
     setTimeout(function() {
-      assert(changed.length == 2, 'should log extactly 2 events');
+      assert.strictEqual(changed.length, 2, 'should log extactly 2 events');
       assert(~changed.indexOf(tree.getPath(file3)), 'should include ' + file3);
       assert(~changed.indexOf(tree.getPath(newFile)), 'should include ' + newFile);
       done();
