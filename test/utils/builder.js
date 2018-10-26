@@ -31,19 +31,16 @@ function transform(arr) {
       temp.push(line.text);
       result.push({type: line.type, text: join(temp) });
     }
-
     else if (indent < line.indent) {
       temp.push(line.text);
       result[result.length - 1].type = 'dir';
       result.push({type: line.type, text: join(temp) });
     }
-
-    else if (indent == line.indent) {
+    else if (indent === line.indent) {
       temp.pop();
       temp.push(line.text);
       result.push({type: line.type, text: join(temp) });
     }
-
     else if(indent > line.indent) {
       temp.pop();
       temp.pop();
@@ -63,9 +60,12 @@ module.exports = function builder() {
   var root = defaultTestPath;
   transformed.forEach(function(line) {
     var target = path.join(root, line.text)
-    line.type == 'dir'
-      ? fs.ensureDirSync(target)
-      : fs.ensureFileSync(target);
+    if (line.type === 'dir') {
+      fs.ensureDirSync(target);
+    }
+    else {
+      fs.ensureFileSync(target);
+    }
   });
   return {
     getPath: function(fpath) {
@@ -74,7 +74,7 @@ module.exports = function builder() {
     modify: function(fpath, delay) {
       var filePath = this.getPath(fpath);
       setTimeout(function() {
-        fs.appendFileSync(filePath, 'hello', 'utf-8');
+        fs.appendFileSync(filePath, 'hello');
       }, delay || 0);
     },
     remove: function(fpath, delay) {

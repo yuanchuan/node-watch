@@ -1,10 +1,18 @@
+/* eslint-env mocha */
 var assert = require('assert');
-var fs = require('fs-extra');
 var Tree = require('./utils/builder');
-var watch = require('../');
+var watch = require('../lib/watch');
 
 var tree = Tree();
 var watcher;
+
+function newBuffer(input) {
+  if (Buffer.from) {
+    return Buffer.from(input);
+  }
+
+  return new Buffer(input);
+}
 
 beforeEach(function(done) {
   tree = Tree();
@@ -13,13 +21,15 @@ beforeEach(function(done) {
 });
 
 after(function() {
-  tree && tree.cleanup()
+  if (tree) {
+    tree.cleanup();
+  }
 });
 
 
 describe('watch for files', function() {
   it('should watch a single file and keep watching', function(done) {
-    this.timeout(3000);
+    this.timeout(3000); // eslint-disable-line no-invalid-this
     var times = 1;
     var file = 'home/a/file1';
     var fpath = tree.getPath(file);
@@ -35,7 +45,6 @@ describe('watch for files', function() {
   });
 
   it('should watch files inside a directory', function(done) {
-    var dir = 'home/a';
     var fpath = tree.getPath('home/a');
     var stack = [
       tree.getPath('home/a/file1'),
@@ -55,9 +64,9 @@ describe('watch for files', function() {
     var fpath = tree.getPath(file);
     var times = 0;
     watcher = watch(fpath, function(evt, name) {
-      if (fpath == name) times++;
+      if (fpath === name) times++;
       setTimeout(function() {
-        assert(times == 1)
+        assert(times === 1)
         done();
       }, 200);
     });
@@ -86,7 +95,7 @@ describe('watch for directoies', function() {
   it('should watch new created directories', function(done) {
     var home = tree.getPath('home');
     watcher = watch(home, { recursive: true }, function(evt, name) {
-      if (name == tree.getPath('home/new/file1')) {
+      if (name === tree.getPath('home/new/file1')) {
         done();
       }
     });
@@ -100,7 +109,7 @@ describe('events', function() {
     var file = 'home/a/file1';
     var fpath = tree.getPath(file);
     watcher = watch(fpath, function(evt, name) {
-      if (evt == 'remove' && name == fpath) done();
+      if (evt === 'remove' && name === fpath) done();
     });
     tree.remove(file, 100);
   });
@@ -109,7 +118,7 @@ describe('events', function() {
     var file = 'home/a/file1';
     var fpath = tree.getPath(file);
     watcher = watch(fpath, function(evt, name) {
-      if (evt == 'update' && name == fpath) done();
+      if (evt === 'update' && name === fpath) done();
     });
     tree.modify(file, 100);
   });
@@ -129,7 +138,7 @@ describe('events', function() {
     var file = 'home/a/newfile' + Date.now();
     var fpath = tree.getPath(file);
     watcher = watch(dir, function(evt, name) {
-      if (evt == 'update' && name == fpath) done();
+      if (evt === 'update' && name === fpath) done();
     });
     tree.newFile(file);
   });
@@ -188,7 +197,7 @@ describe('options', function() {
       var fpath = tree.getPath(file);
       watcher = watch(dir, 'base64', function(evt, name) {
         assert(
-          name === (Buffer.from ? Buffer.from(fpath) : new Buffer(fpath)).toString('base64'),
+          name === newBuffer(fpath).toString('base64'),
           'wrong base64 encoding'
         );
         done();
@@ -202,7 +211,7 @@ describe('options', function() {
       var fpath = tree.getPath(file);
       watcher = watch(dir, 'hex', function(evt, name) {
         assert(
-          name === (Buffer.from ? Buffer.from(fpath) : new Buffer(fpath)).toString('hex'),
+          name === newBuffer(fpath).toString('hex'),
           'wrong hex encoding'
         );
         done();
@@ -256,7 +265,7 @@ describe('options', function() {
       var times = 0;
       watcher = watch(dir, options, function(evt, name) {
         times++;
-        if (name == tree.getPath(file2)) {
+        if (name === tree.getPath(file2)) {
           assert(times, 1, 'home/bb/file1 should be ignored.');
           done();
         }
@@ -279,7 +288,7 @@ describe('options', function() {
       var times = 0;
       watcher = watch(dir, options, function(evt, name) {
         times++;
-        if (name == tree.getPath(file2)) {
+        if (name === tree.getPath(file2)) {
           assert(times, 1, 'home/bb/file1 should be ignored.');
           done();
         }
@@ -294,9 +303,8 @@ describe('options', function() {
     it('should have delayed response', function(done) {
       var dir = tree.getPath('home/a');
       var file = 'home/a/file1';
-      var fpath = tree.getPath(file);
       var start;
-      watcher = watch(dir, { delay: 1000 }, function(evt, name) {
+      watcher = watch(dir, { delay: 1000 }, function(evt, name) { // eslint-disable-line no-unused-vars
         assert(Date.now() - start > 1000, 'delay not working');
         done();
       });
@@ -323,8 +331,8 @@ describe('parameters', function() {
 
   it('should accept filename as Buffer', function(done) {
     var fpath = tree.getPath('home/a/file1');
-    watcher = watch(new Buffer(fpath), function(evt, name) {
-      assert(name == fpath);
+    watcher = watch(newBuffer(fpath), function(evt, name) {
+      assert(name === fpath);
       done();
     });
     tree.modify('home/a/file1', 100);
@@ -338,10 +346,10 @@ describe('parameters', function() {
       tree.getPath(file2)
     ];
 
-    times = 0;
+    var times = 0;
     watcher = watch(fpaths, function(evt, name) {
       if (fpaths.indexOf(name) !== -1) times++;
-      if (times == 2) done();  // calling done more than twice causes mocha test to fail
+      if (times === 2) done();  // calling done more than twice causes mocha test to fail
     });
 
     tree.modify(file1, 100);
@@ -388,8 +396,8 @@ describe('watcher object', function() {
 
     watcher = watch(dir);
     watcher.on('change', function(evt, name) {
-      assert(evt == 'update');
-      assert(name == fpath);
+      assert(evt === 'update');
+      assert(name === fpath);
       done();
     });
 
@@ -401,7 +409,7 @@ describe('watcher object', function() {
     var file = 'home/a/file1';
     var times = 0;
     watcher = watch(dir);
-    watcher.on('change', function(evt, name) {
+    watcher.on('change', function(evt, name) { // eslint-disable-line no-unused-vars
       times++;
     });
     watcher.close();
