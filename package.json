@@ -17,13 +17,17 @@
   },
   "url": "https://github.com/yuanchuan/node-watch",
   "author": "yuanchuan <yuanchuan23@gmail.com> (http://yuanchuan.name)",
-  "main": "./index.js",
+  "main": "./lib/watch",
   "homepage": "https://github.com/yuanchuan/node-watch#readme",
   "scripts": {
-    "test": "mocha"
+    "lint": "eslint test/**/*.js lib/**/*.js",
+    "test": "mocha test/test.js",
+    "test-all": "npm run lint && nyc --nycrc-path .nycrc-mocha.json ./node_modules/.bin/_mocha test/test.js"
   },
   "devDependencies": {
-    "fs-extra": "^1.0.0",
-    "mocha": "^3.2.0"
+    "eslint": "^5.7.0",
+    "fs-extra": "^7.0.0",
+    "mocha": "^3.5.3",
+    "nyc": "^13.1.0"
   }
 }

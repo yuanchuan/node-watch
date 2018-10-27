@@ -1,2 +1,4 @@
 node_modules
 test/utils/__TREE__
+.nyc_output/
+coverage/

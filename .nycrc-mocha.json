@@ -1,0 +1,29 @@
+{
+  "all": true,
+  "branches": 60,
+  "cache": false,
+  "check-coverage": true,
+  "eager": true,
+  "exclude": [],
+  "extension": [],
+  "functions": 60,
+  "include": [
+    "lib/**/*.js"
+  ],
+  "instrument": true,
+  "lines": 60,
+  "per-file": false,
+  "report-dir": "coverage",
+  "reporter": [
+    "lcov",
+    "text-summary"
+  ],
+  "require": [],
+  "statements": 60,
+  "watermarks": {
+    "lines": [60, 80],
+    "functions": [60, 80],
+    "branches": [60, 80],
+    "statements": [60, 80]
+  }
+}
