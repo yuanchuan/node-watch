@@ -423,4 +423,27 @@ describe('watcher object', function() {
     }, 400);
   });
 
+  it('Do not emit after close', function(done) {
+    var dir = tree.getPath('home/a');
+    var file = 'home/a/file1';
+    var times = 0;
+    watcher = watch(dir);
+    watcher.on('change', function(evt, name) {
+      times++;
+    });
+
+    watcher.close();
+
+    var timer = setInterval(function() {
+      tree.modify(file);
+    });
+
+    setTimeout(function() {
+      clearInterval(timer);
+      assert(watcher.isClosed(), 'watcher should be closed');
+      assert(times === 0, 'failed to close the watcher');
+      done();
+    }, 400);
+  });
+
 });
