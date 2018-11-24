@@ -1,4 +1,3 @@
-/* eslint-env mocha */
 var assert = require('assert');
 var Tree = require('./utils/builder');
 var watch = require('../lib/watch');
@@ -29,7 +28,7 @@ after(function() {
 
 describe('watch for files', function() {
   it('should watch a single file and keep watching', function(done) {
-    this.timeout(3000); // eslint-disable-line no-invalid-this
+    this.timeout(3000);
     var times = 1;
     var file = 'home/a/file1';
     var fpath = tree.getPath(file);
@@ -304,7 +303,7 @@ describe('options', function() {
       var dir = tree.getPath('home/a');
       var file = 'home/a/file1';
       var start;
-      watcher = watch(dir, { delay: 1000 }, function(evt, name) { // eslint-disable-line no-unused-vars
+      watcher = watch(dir, { delay: 1000 }, function(evt, name) {
         assert(Date.now() - start > 1000, 'delay not working');
         done();
       });
@@ -409,7 +408,7 @@ describe('watcher object', function() {
     var file = 'home/a/file1';
     var times = 0;
     watcher = watch(dir);
-    watcher.on('change', function(evt, name) { // eslint-disable-line no-unused-vars
+    watcher.on('change', function(evt, name) {
       times++;
     });
     watcher.close();
