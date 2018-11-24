@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.9
+* Fix function detection.
+* Emit `close` event after calling `.close()`.
+* Don't emit any events after close.
+* Change default `delay` to 200ms.
+
 ## 0.5.8
 * Fix async function detection.
 
