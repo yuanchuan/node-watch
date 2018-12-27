@@ -5,14 +5,6 @@ var watch = require('../lib/watch');
 var tree = Tree();
 var watcher;
 
-function newBuffer(input) {
-  if (Buffer.from) {
-    return Buffer.from(input);
-  }
-
-  return new Buffer(input);
-}
-
 beforeEach(function(done) {
   tree = Tree();
   if (watcher && !watcher.isClosed()) watcher.close();
@@ -196,7 +188,7 @@ describe('options', function() {
       var fpath = tree.getPath(file);
       watcher = watch(dir, 'base64', function(evt, name) {
         assert(
-          name === newBuffer(fpath).toString('base64'),
+          name === Buffer.from(fpath).toString('base64'),
           'wrong base64 encoding'
         );
         done();
@@ -210,7 +202,7 @@ describe('options', function() {
       var fpath = tree.getPath(file);
       watcher = watch(dir, 'hex', function(evt, name) {
         assert(
-          name === newBuffer(fpath).toString('hex'),
+          name === Buffer.from(fpath).toString('hex'),
           'wrong hex encoding'
         );
         done();
@@ -330,7 +322,7 @@ describe('parameters', function() {
 
   it('should accept filename as Buffer', function(done) {
     var fpath = tree.getPath('home/a/file1');
-    watcher = watch(newBuffer(fpath), function(evt, name) {
+    watcher = watch(Buffer.from(fpath), function(evt, name) {
       assert(name === fpath);
       done();
     });
