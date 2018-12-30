@@ -171,6 +171,25 @@ describe('watch for directories', function() {
       }, 300);
     });
   });
+
+  it('should watch new directories without delay', function(done) {
+    var home = tree.getPath('home');
+    var events = [];
+    watcher = watch(home, { delay: 200, recursive: true }, function(evt, name) {
+      if (name === tree.getPath('home/new/file1')) {
+        events.push(evt);
+      }
+    });
+    watcher.on('ready', function() {
+      tree.newFile('home/new/file1');
+      tree.modify('home/new/file1', 50);
+      tree.modify('home/new/file1', 100);
+      setTimeout(function() {
+        assert.deepStrictEqual(events, ['update']);
+        done();
+      }, 350);
+    });
+  });
 });
 
 describe('file events', function() {
