@@ -124,6 +124,23 @@ describe('events', function() {
     watcher.close();
   });
 
+  it('should emit `ready` event when watching a file', function(done) {
+    var file = 'home/a/file1';
+    var fpath = tree.getPath(file);
+    watcher = watch(fpath);
+    watcher.on('ready', function() {
+      done();
+    });
+  });
+
+  it('should emit `ready` event when watching a directory recursively', function(done) {
+    var dir = tree.getPath('home');
+    watcher = watch(dir, { recursive: true });
+    watcher.on('ready', function() {
+      done();
+    });
+  });
+
   it('should report `update` on new files', function(done) {
     var dir = tree.getPath('home/a');
     var file = 'home/a/newfile' + Date.now();
