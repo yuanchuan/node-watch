@@ -20,7 +20,7 @@
   "main": "./lib/watch",
   "homepage": "https://github.com/yuanchuan/node-watch#readme",
   "scripts": {
-    "test": "mocha test/test.js --exit"
+    "test": "mocha test/test.js --exit --slow 500"
   },
   "devDependencies": {
     "fs-extra": "^7.0.1",
