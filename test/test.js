@@ -5,8 +5,11 @@ var watch = require('../lib/watch');
 var tree = Tree();
 var watcher;
 
-beforeEach(function(done) {
+beforeEach(function() {
   tree = Tree();
+});
+
+afterEach(function(done) {
   if (watcher && !watcher.isClosed()) {
     watcher.on('close', done);
     watcher.close();
@@ -109,13 +112,23 @@ describe('watch for directories', function() {
   it('should watch directories inside a directory', function(done) {
     var home = tree.getPath('home');
     var dir = tree.getPath('home/c');
+    var events = [];
 
     watcher = watch(home, { delay: 0, recursive: true }, function(evt, name) {
-      assert.equal(dir, name);
-      done();
+      if (name === dir) {
+        events.push(evt);
+      }
     });
     watcher.on('ready', function() {
       tree.remove('home/c');
+
+      setTimeout(function () {
+        assert.deepStrictEqual(
+          events,
+          [ 'remove' ]
+        );
+        done();
+      }, 400);
     });
   });
 
@@ -156,6 +169,25 @@ describe('watch for directories', function() {
         assert.deepStrictEqual(events, [dir, file1, file2]);
         done();
       }, 300);
+    });
+  });
+
+  it('should watch new directories without delay', function(done) {
+    var home = tree.getPath('home');
+    var events = [];
+    watcher = watch(home, { delay: 200, recursive: true }, function(evt, name) {
+      if (name === tree.getPath('home/new/file1')) {
+        events.push(evt);
+      }
+    });
+    watcher.on('ready', function() {
+      tree.newFile('home/new/file1');
+      tree.modify('home/new/file1', 50);
+      tree.modify('home/new/file1', 100);
+      setTimeout(function() {
+        assert.deepStrictEqual(events, ['update']);
+        done();
+      }, 350);
     });
   });
 });
@@ -202,8 +234,9 @@ describe('options', function() {
       var dir = tree.getPath('home');
       var file = tree.getPath('home/bb/file1');
       watcher = watch(dir, { recursive: true }, function(evt, name) {
-        assert.equal(file, name);
-        done();
+        if (file === name) {
+          done();
+        }
       });
       watcher.on('ready', function() {
         tree.modify('home/bb/file1');
@@ -466,7 +499,6 @@ describe('parameters', function() {
   });
 
 });
-
 
 describe('watcher object', function() {
   it('should using watcher object to watch', function(done) {
