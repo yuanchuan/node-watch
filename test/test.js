@@ -135,6 +135,29 @@ describe('watch for directories', function() {
       tree.modify('home/new/file1', 100);
     });
   });
+
+  it('should keep watching after removal of sub directory', function(done) {
+    var home = tree.getPath('home');
+    var file1 = tree.getPath('home/e/file1');
+    var file2 = tree.getPath('home/e/file2');
+    var dir = tree.getPath('home/e/sub');
+    var events = [];
+    watcher = watch(home, { delay: 0, recursive: true }, function(evt, name) {
+      if (name === dir || name === file1 || name === file2) {
+        events.push(name);
+      }
+    });
+    watcher.on('ready', function() {
+      tree.remove('home/e/sub', 50);
+      tree.modify('home/e/file1', 100);
+      tree.modify('home/e/file2', 200);
+
+      setTimeout(function() {
+        assert.deepStrictEqual(events, [dir, file1, file2]);
+        done();
+      }, 300);
+    });
+  });
 });
 
 describe('file events', function() {
@@ -318,8 +341,8 @@ describe('options', function() {
         tree.modify(file2);
 
         setTimeout(function() {
-          assert(times, 1, 'report file2');
-          assert(!matchIgnoredFile, 'home/bb/file1 should be ignored');
+          assert.equal(times, 1, 'report file2');
+          assert.equal(matchIgnoredFile, false, 'home/bb/file1 should be ignored');
           done();
         }, 100);
       });

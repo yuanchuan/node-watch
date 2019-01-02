@@ -12,6 +12,10 @@ home/
   d/
     file1
     file2
+  e/
+    file1
+    file2
+    sub/
   deep_node_modules/
     ma/
       file1
