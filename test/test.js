@@ -48,6 +48,16 @@ describe('process events', function() {
       done();
     });
   });
+
+  it('should emit `ready` properly in a composed watcher', function(done) {
+    var dir1 = tree.getPath('home/a');
+    var dir2 = tree.getPath('home/b');
+    var file = tree.getPath('home/b/file1');
+    watcher = watch([dir1, dir2, file], { recursive: true });
+    watcher.on('ready', function() {
+      done();
+    });
+  });
 });
 
 describe('watch for files', function() {
