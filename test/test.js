@@ -51,6 +51,16 @@ describe('process events', function() {
       done();
     });
   });
+
+  it('should emit `ready` properly in a composed watcher', function(done) {
+    var dir1 = tree.getPath('home/a');
+    var dir2 = tree.getPath('home/b');
+    var file = tree.getPath('home/b/file1');
+    watcher = watch([dir1, dir2, file], { recursive: true });
+    watcher.on('ready', function() {
+      done();
+    });
+  });
 });
 
 describe('watch for files', function() {
@@ -465,9 +475,11 @@ describe('parameters', function() {
       if (times === 2) done();  // calling done more than twice causes mocha test to fail
     });
 
-    // FIXME: composeWatcher doesn't support "ready" event
-    tree.modify(file1);
-    tree.modify(file2);
+    watcher.on('ready', function() {
+      tree.modify(file1);
+      tree.modify(file2);
+    });
+
   });
 
   it('should filter duplicate events for composed watcher', function(done) {
@@ -487,15 +499,17 @@ describe('parameters', function() {
       changed.push(name);
     });
 
-    tree.modify(file3);
-    tree.newFile(newFile);
+    watcher.on('ready', function() {
+      tree.modify(file3);
+      tree.newFile(newFile);
 
-    setTimeout(function() {
-      assert.strictEqual(changed.length, 2, 'should log exactly 2 events');
-      assert(~changed.indexOf(tree.getPath(file3)), 'should include ' + file3);
-      assert(~changed.indexOf(tree.getPath(newFile)), 'should include ' + newFile);
-      done();
-    }, 300);
+      setTimeout(function() {
+        assert.strictEqual(changed.length, 2, 'should log exactly 2 events');
+        assert(changed.includes(tree.getPath(file3)), 'should include ' + file3);
+        assert(changed.includes(tree.getPath(newFile)), 'should include ' + newFile);
+        done();
+      }, 100);
+    });
   });
 
 });
