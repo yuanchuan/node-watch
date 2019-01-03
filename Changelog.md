@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.0
+Special thanks to [Timo Tijhof](https://github.com/Krinkle)
+
+* Drop support for node < 6.0
+* Add `ready` event for the watcher.
+* Lots of bug fixed.
+
 ## 0.5.9
 * Fix function detection.
 * Emit `close` event after calling `.close()`.

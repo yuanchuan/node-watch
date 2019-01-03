@@ -101,6 +101,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Krinkle",
+      "name": "Timo Tijhof",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/156867?v=4",
+      "profile": "https://timotijhof.net",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoType": "github"
