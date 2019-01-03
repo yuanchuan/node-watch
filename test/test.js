@@ -116,6 +116,29 @@ describe('watch for files', function() {
       }, 250);
     });
   });
+
+  // https://github.com/yuanchuan/node-watch/issues/79
+  it('should listen to new created files', function(done) {
+    var home = tree.getPath('home');
+    var newfile1 = 'home/a/newfile' + Math.random();
+    var newfile2 = 'home/a/newfile' + Math.random();
+    var changes = [];
+    watcher = watch(home, { delay: 0, recursive: true }, function(evt, name) {
+      changes.push(name);
+    });
+    watcher.on('ready', function() {
+      tree.newFile(newfile1);
+      tree.newFile(newfile2);
+      setTimeout(function() {
+        assert.deepStrictEqual(
+          changes,
+          [tree.getPath(newfile1), tree.getPath(newfile2)]
+        );
+        done();
+      }, 100);
+    });
+  });
+
 });
 
 describe('watch for directories', function() {
@@ -479,39 +502,38 @@ describe('parameters', function() {
       tree.modify(file1);
       tree.modify(file2);
     });
-
   });
 
   it('should filter duplicate events for composed watcher', function(done) {
-    var file1 = 'home';
-    var file2 = 'home/a';
-    var file3 = 'home/a/file2';
-    var newFile = 'home/a/newfile' + Date.now();
+    var home = 'home';
+    var dir = 'home/a';
+    var file1 = 'home/a/file1';
+    var file2 = 'home/a/file2';
     var fpaths = [
+      tree.getPath(home),
+      tree.getPath(dir),
       tree.getPath(file1),
-      tree.getPath(file2),
-      tree.getPath(file3)
+      tree.getPath(file2)
     ];
 
-    var changed = [];
-
+    var changes = [];
     watcher = watch(fpaths, { delay: 0, recursive: true }, function(evt, name) {
-      changed.push(name);
+      changes.push(name);
     });
 
     watcher.on('ready', function() {
-      tree.modify(file3);
-      tree.newFile(newFile);
+      tree.modify(file1);
+      tree.modify(file2);
 
       setTimeout(function() {
-        assert.strictEqual(changed.length, 2, 'should log exactly 2 events');
-        assert(changed.includes(tree.getPath(file3)), 'should include ' + file3);
-        assert(changed.includes(tree.getPath(newFile)), 'should include ' + newFile);
+        assert.deepStrictEqual(
+          changes,
+          [tree.getPath(file1), tree.getPath(file2)]
+        );
         done();
       }, 100);
     });
   });
-
 });
 
 describe('watcher object', function() {
@@ -578,5 +600,4 @@ describe('watcher object', function() {
       }, 100);
     });
   });
-
 });
