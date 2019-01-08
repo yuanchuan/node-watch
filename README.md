@@ -92,7 +92,7 @@ The watch function returns a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_cl
 
 #### Watcher events
 
-```
+```js
 watcher.on('change', function(evt, name) {
   // callback
 });
@@ -108,7 +108,7 @@ watcher.on('ready', function() {
 
 #### Close
 
-```
+```js
 // close
 watcher.close();
 
