@@ -10,11 +10,8 @@ import { FSWatcher } from 'fs';
  * @param {WatchOptions|string} options
  * @param {Function} listener
  */
-declare function watch(
-    filename: string,
-    options ?: WatchOptions | string,
-    listener ?: (eventType: 'update' | 'remove', filename: string) => any
-) : ImprovedFSWatcher;
+declare function watch(filename: string, listener ?: (eventType: 'update' | 'remove', filename: string) => any) : ImprovedFSWatcher;
+declare function watch(filename: string, options ?: WatchOptions | string, listener ?: (eventType: 'update' | 'remove', filename: string) => any) : ImprovedFSWatcher;
 
 type WatchOptions = {
     /**
