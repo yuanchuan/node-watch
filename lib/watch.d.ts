@@ -2,8 +2,10 @@ import { FSWatcher } from 'fs';
 
 /**
  * Watch for changes on `filename`, where filename is either a file or a directory. The second argument is optional.
- * If `options` is provided as a string, it specifies the encoding. Otherwise `options` should be passed as an object.
- * The listener callback gets two arguments `(eventType, filename)`. `eventType` is either `update` or `remove`, and
+ *
+ * - If `options` is provided as a string, it specifies the encoding. Otherwise `options` should be passed as an object.
+ *
+ * - The listener callback gets two arguments `(eventType, filename)`. `eventType` is either `update` or `remove`, and
  * `filename` is the name of the file which triggered the event.
  *
  * @param {string} filename File or directory to watch.
@@ -32,7 +34,7 @@ type WatchOptions = {
      * Specifies the character encoding to be used for the filename passed to the listener.
      * @default 'utf8'
      */
-    encoding ?: boolean;
+    encoding ?: string;
 
     /**
      * Only files which pass this filter (when it returns `true`) will be sent to the listener.
