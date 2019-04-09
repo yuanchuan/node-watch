@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.1
+
+* Add TypeScript support.
+* Fix race condition of `fs.exists` and `fs.stat`.
+* Prevent redundant events on Windows when creating file/directory.
+
+
 ## 0.6.0
 Special thanks to [Timo Tijhof](https://github.com/Krinkle)
 
