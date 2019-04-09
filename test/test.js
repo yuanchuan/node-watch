@@ -517,7 +517,7 @@ describe('parameters', function() {
     ];
 
     var changes = [];
-    watcher = watch(fpaths, { delay: 0, recursive: true }, function(evt, name) {
+    watcher = watch(fpaths, { delay: 50, recursive: true }, function(evt, name) {
       changes.push(name);
     });
 
@@ -531,7 +531,7 @@ describe('parameters', function() {
           [tree.getPath(file1), tree.getPath(file2)]
         );
         done();
-      }, 100);
+      }, 150);
     });
   });
 });
