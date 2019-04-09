@@ -18,6 +18,7 @@
   "url": "https://github.com/yuanchuan/node-watch",
   "author": "yuanchuan <yuanchuan23@gmail.com> (http://yuanchuan.name)",
   "main": "./lib/watch",
+  "types": "./lib/watch.d.ts",
   "homepage": "https://github.com/yuanchuan/node-watch#readme",
   "scripts": {
     "test": "mocha test/test.js --exit --slow 500"
