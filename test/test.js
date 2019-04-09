@@ -390,7 +390,7 @@ describe('options', function() {
         delay: 0,
         recursive: true,
         filter: function(name) {
-          return !/file1/.test(name);
+          return /bb\/file2/.test(name);
         }
       }
 
