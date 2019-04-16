@@ -3,3 +3,4 @@ test/utils/__TREE__
 .nyc_output/
 coverage/
 package-lock.json
+.DS_Store
