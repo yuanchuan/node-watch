@@ -132,10 +132,6 @@ watcher.isClosed()
 
 ## Known issues
 
-**Windows**
-
-  * Will output its parent directory when a new file/directory is created in a deep directory.
-
 **Windows, node < v4.2.5**
 
   * Failed to detect `remove` event
