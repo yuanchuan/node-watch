@@ -8,13 +8,17 @@ import { FSWatcher } from 'fs';
  * - The listener callback gets two arguments `(eventType, filename)`. `eventType` is either `update` or `remove`, and
  * `filename` is the name of the file which triggered the event.
  *
- * @param {string} filename File or directory to watch.
+ * @param {Filename} filename File or directory to watch.
  * @param {WatchOptions|string} options
  * @param {Function} listener
  */
-declare function watch(filename: string, listener : (eventType: 'update' | 'remove', filename: string) => any) : ImprovedFSWatcher;
-declare function watch(filename: string, options : string, listener : (eventType: 'update' | 'remove', filename: string) => any) : ImprovedFSWatcher;
-declare function watch(filename: string, options : WatchOptions, listener : (eventType: 'update' | 'remove', filename: string) => any) : ImprovedFSWatcher;
+declare function watch(filename: Filename, listener : (eventType: 'update' | 'remove', filename: string) => any) : ImprovedFSWatcher;
+declare function watch(filename: Filename, options : string, listener : (eventType: 'update' | 'remove', filename: string) => any) : ImprovedFSWatcher;
+declare function watch(filename: Filename, options : WatchOptions, listener : (eventType: 'update' | 'remove', filename: string) => any) : ImprovedFSWatcher;
+
+interface FilenameArray extends Array<FilenameArray | string> {}
+
+type Filename = string | FilenameArray;
 
 type WatchOptions = {
     /**

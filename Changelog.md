@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.3
+
+* Types: Allow watching multiple files.
+
 ## 0.6.2
 
 * Detect temporary editor files more wisely in order to avoid side effects on Windows.
