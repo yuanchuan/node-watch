@@ -249,6 +249,22 @@ describe('file events', function() {
     });
   });
 
+  it('should be able to handle many events on deleting', function(done) {
+    var dir = 'home/a';
+    var fpath = tree.getPath(dir);
+    var names = tree.newRandomFiles(dir, 300);
+
+    var count = 0;
+    watcher = watch(fpath, function(evt, name) {
+      count += 1;
+      if (count == names.length) done();
+    });
+
+    watcher.on('ready', function() {
+      names.forEach(tree.remove.bind(tree));
+    });
+  });
+
   it('should identify `update` event', function(done) {
     var file = 'home/a/file1';
     var fpath = tree.getPath(file);

@@ -68,8 +68,8 @@ module.exports = function builder() {
     }
   });
   return {
-    getPath: function(fpath) {
-      return path.join(root, fpath);
+    getPath: function(fpath, sub) {
+      return path.join(root, fpath, sub || '');
     },
     modify: function(fpath, delay) {
       var filePath = this.getPath(fpath);
@@ -88,6 +88,16 @@ module.exports = function builder() {
       setTimeout(function() {
         fs.ensureFileSync(filePath);
       }, delay || 0)
+    },
+    newRandomFiles: function(fpath, count) {
+      var names = [];
+      for (var i = 0; i < count; ++i) {
+        var name = Math.random().toString().substr(2);
+        var filePath = this.getPath(fpath, name);
+        fs.ensureFileSync(filePath);
+        names.push(path.join(fpath, name));
+      }
+      return names;
     },
     newSymLink: function(src, dist) {
       fs.ensureSymlinkSync(
