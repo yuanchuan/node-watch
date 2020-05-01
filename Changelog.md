@@ -4,8 +4,6 @@
 
 * Fix `ERR_FEATURE_UNAVAILABLE_ON_PLATFORM` error for Node v14.
 
-# Changelog
-
 ## 0.6.3
 
 * Types: Allow watching multiple files.
