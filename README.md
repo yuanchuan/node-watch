@@ -49,14 +49,27 @@ The usage and options of `node-watch` are compatible with [fs.watch](https://nod
 
 * `filter: RegExp | Function`
 
-   Return that matches the filter expression.
+   Return files/directories that match the expression.
 
     ```js
     // filter with regular expression
     watch('./', { filter: /\.json$/ });
 
     // filter with custom function
-    watch('./', { filter: f => !/node_modules/.test(f) });
+    watch('./', { filter: n => !/node_modules/.test(n) });
+    ```
+* `ignore: RegExp | Function`
+
+   Do not return files/directories that match the expression.
+   Furthermore, this does "manual" recursion, which may improve
+   resource usage.
+
+    ```js
+    // filter with regular expression
+    watch('./', { ignore: /\.pdf$/ });
+
+    // filter with custom function
+    watch('./', { filter: n => /node_modules/.test(n) });
     ```
 * `delay: Number` (in ms, default **200**)
 

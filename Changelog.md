@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+* Add option `ignore` which will ignore matching files and directories, as well as
+  set up recursion manually and not watch ignored directories on all platforms.
+
 ## 0.6.3
 
 * Types: Allow watching multiple files.
