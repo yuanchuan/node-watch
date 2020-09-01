@@ -472,6 +472,25 @@ describe('options', function() {
         }, 100);
       });
     });
+
+    it('should be able to skip subdirectories', function(done) {
+      var options = {
+        delay: 0,
+        recursive: true,
+        filter: function(name, skip) {
+          if (/deep_node_modules/.test(name)) return skip;
+        }
+      };
+
+      watcher = watch(tree.getPath('home'), options);
+
+      watcher.getWatchedPaths(function(paths) {
+        var found = paths.find(n => /deep_node_modules/.test(n));
+        assert(!found, 'failed to skip subdirectory');
+        done();
+      });
+    });
+
   });
 
   describe('delay', function() {
