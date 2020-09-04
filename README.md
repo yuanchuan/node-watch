@@ -57,15 +57,55 @@ The usage and options of `node-watch` are compatible with [fs.watch](https://nod
 
     // filter with custom function
     watch('./', { filter: f => !/node_modules/.test(f) });
+
     ```
+
+   Each file and directory will be passed to the filter to determine whether
+   it will then be passed to the callback function. Like `Array.filter` does in `JavaScript`.
+   There are three kinds of return values for filter function:
+
+     * **`true`**: Will be passed to callback.
+     * **`false`**: Will not be passed to callback.
+     * **`skip`**: Same with `false`, and skip to watch all its subdirectories.
+
+
+   On Linux, where the `recursive` option is not natively supported,
+   you could skip to watch all its subdirectories by returning the `skip` flag.
+
+    ```js
+    watch('./', {
+      resursive: true,
+      filter(f, skip) {
+        // skip node_modules
+        if (/\/node_modules/.test(f)) return skip;
+        // skip .git folder
+        if (/\.git/.test(f)) return skip;
+        // only watch for js files
+        return /\.js$/.test(f);
+      }
+    });
+
+    ```
+
+    Use [minimatch](https://www.npmjs.com/package/minimatch) for filter:
+
+     ```js
+     let minimatch = require("minimatch");
+
+     watch('./', {
+       filter: f => minimatch(f, "*.js")
+     });
+
+     ```
+
 * `delay: Number` (in ms, default **200**)
 
    Delay time of the callback function.
 
-   ```js
-   // log after 5 seconds
-   watch('./', { delay: 5000 }, console.log);
-   ```
+    ```js
+    // log after 5 seconds
+    watch('./', { delay: 5000 }, console.log);
+    ```
 
 ## Events
 
@@ -93,6 +133,8 @@ The watch function returns a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_cl
 #### Watcher events
 
 ```js
+let watcher = watch('./', { recursive: true });
+
 watcher.on('change', function(evt, name) {
   // callback
 });
@@ -128,6 +170,7 @@ watcher.isClosed()
 
 ##### Extra methods
 * `.isClosed` detect if the watcher is closed
+* `.getWatchedPaths` get all the watched paths
 
 
 ## Known issues
@@ -155,7 +198,7 @@ watch(['file1', 'file2'], console.log);
 // https://github.com/nodejs/node-v0.x-archive/issues/3211
 require('epipebomb')();
 
-var watcher = require('node-watch')(
+let watcher = require('node-watch')(
   process.argv[2] || './', { recursive: true }, console.log
 );
 
