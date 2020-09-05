@@ -68,9 +68,8 @@ The usage and options of `node-watch` are compatible with [fs.watch](https://nod
      * **`false`**: Will not be passed to callback.
      * **`skip`**: Same with `false`, and skip to watch all its subdirectories.
 
-
    On Linux, where the `recursive` option is not natively supported,
-   you could skip to watch all its subdirectories by returning the `skip` flag.
+   it is more efficient to skip ignored directories by returning the `skip` flag:
 
     ```js
     watch('./', {
@@ -87,15 +86,16 @@ The usage and options of `node-watch` are compatible with [fs.watch](https://nod
 
     ```
 
-    Use [minimatch](https://www.npmjs.com/package/minimatch) for filter:
+    If you prefer glob patterns you can use [minimatch](https://www.npmjs.com/package/minimatch) or [picomatch](https://www.npmjs.com/package/picomatch)
+    together with filter:
 
      ```js
-     let minimatch = require("minimatch");
+     const pm = require('picomatch');
+     let isMatch = pm('*.js');
 
      watch('./', {
-       filter: f => minimatch(f, "*.js")
+       filter: f => isMatch(f)
      });
-
      ```
 
 * `delay: Number` (in ms, default **200**)
