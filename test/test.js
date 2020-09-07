@@ -486,15 +486,15 @@ describe('options', function() {
 
       watcher.getWatchedPaths(function(paths) {
         hasNativeRecursive(function(supportRecursive) {
-          let watched = supportRecursive
-          // The skip flag has no effect to the platforms which support recursive option,
-          // so the home directory is the only one that's in the watching list.
-          ? [home]
-          // The deep_node_modules and all its subdirectories should not be watched
-          // with skip flag specified in the filter.
-          : tree.getAllDirectories().filter(function(name) {
-              return !/\/deep_node_modules/.test(name);
-            });
+          var watched = supportRecursive
+              // The skip flag has no effect to the platforms which support recursive option,
+              // so the home directory is the only one that's in the watching list.
+            ? [home]
+              // The deep_node_modules and all its subdirectories should not be watched
+              // with skip flag specified in the filter.
+            : tree.getAllDirectories().filter(function(name) {
+                return !/\/deep_node_modules/.test(name);
+              });
 
           assert.deepStrictEqual(
             watched.sort(), paths.sort()
@@ -672,11 +672,11 @@ describe('watcher object', function() {
       });
       watcher.getWatchedPaths(function(paths) {
         hasNativeRecursive(function(supportRecursive) {
-          let watched = supportRecursive
-            // The home directory is the only one that's being watched
-            // if the recursive option is natively supported.
+          var watched = supportRecursive
+              // The home directory is the only one that's being watched
+              // if the recursive option is natively supported.
             ? [home]
-            // Otherwise it should include all its subdirectories.
+              // Otherwise it should include all its subdirectories.
             : tree.getAllDirectories();
 
           assert.deepStrictEqual(
@@ -719,9 +719,9 @@ describe('watcher object', function() {
 
       watcher.getWatchedPaths(function(paths) {
         hasNativeRecursive(function(supportRecursive) {
-          let watched = supportRecursive
+          var watched = supportRecursive
             ? [a, b, nested]
-            : [a, b, nested, ma, mb, mc]
+            : [a, b, nested, ma, mb, mc];
 
           assert.deepStrictEqual(
             watched.sort(), paths.sort()
@@ -731,6 +731,5 @@ describe('watcher object', function() {
         });
       });
     });
-
   });
 });

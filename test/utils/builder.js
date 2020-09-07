@@ -121,9 +121,9 @@ module.exports = function builder() {
     },
     getAllDirectories: function() {
       function walk(dir) {
-        let ret = [];
+        var ret = [];
         fs.readdirSync(dir).forEach(function(d) {
-          let fpath = path.join(dir, d);
+          var fpath = path.join(dir, d);
           if (fs.statSync(fpath).isDirectory()) {
             ret.push(fpath);
             ret = ret.concat(walk(fpath));
