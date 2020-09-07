@@ -8,6 +8,7 @@ var watcher;
 
 beforeEach(function() {
   tree = Tree();
+  tree.remove('home/new');
 });
 
 afterEach(function(done) {
