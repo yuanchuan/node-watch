@@ -1,5 +1,6 @@
 var fs = require('fs-extra');
 var path = require('path');
+
 var structure = fs.readFileSync(
   path.join(__dirname, './structure'),
   'utf-8'
@@ -58,12 +59,10 @@ var defaultTestPath= path.join(__dirname, '__TREE__');
 
 module.exports = function builder() {
   var root = defaultTestPath;
-  var allDirectories = [];
   transformed.forEach(function(line) {
     var target = path.join(root, line.text)
     if (line.type === 'dir') {
       fs.ensureDirSync(target);
-      allDirectories.push(target);
     }
     else {
       fs.ensureFileSync(target);
@@ -121,7 +120,18 @@ module.exports = function builder() {
       }
     },
     getAllDirectories: function() {
-      return allDirectories;
+      function walk(dir) {
+        let ret = [];
+        fs.readdirSync(dir).forEach(function(d) {
+          let fpath = path.join(dir, d);
+          if (fs.statSync(fpath).isDirectory()) {
+            ret.push(fpath);
+            ret = ret.concat(walk(fpath));
+          }
+        });
+        return ret;
+      }
+      return walk(root);
     }
   }
 }
