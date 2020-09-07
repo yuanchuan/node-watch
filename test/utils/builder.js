@@ -58,10 +58,12 @@ var defaultTestPath= path.join(__dirname, '__TREE__');
 
 module.exports = function builder() {
   var root = defaultTestPath;
+  var allDirectories = [];
   transformed.forEach(function(line) {
     var target = path.join(root, line.text)
     if (line.type === 'dir') {
       fs.ensureDirSync(target);
+      allDirectories.push(target);
     }
     else {
       fs.ensureFileSync(target);
@@ -117,6 +119,9 @@ module.exports = function builder() {
       } catch (e) {
         console.warn('cleanup failed.');
       }
+    },
+    getAllDirectories: function() {
+      return allDirectories;
     }
   }
 }

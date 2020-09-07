@@ -1,6 +1,7 @@
 var assert = require('assert');
 var Tree = require('./utils/builder');
 var watch = require('../lib/watch');
+var hasNativeRecursive = require('../lib/has-native-recursive');
 
 var tree = Tree();
 var watcher;
@@ -138,7 +139,6 @@ describe('watch for files', function() {
       }, 100);
     });
   });
-
 });
 
 describe('watch for directories', function() {
@@ -473,24 +473,37 @@ describe('options', function() {
       });
     });
 
-    it('should be able to skip subdirectories', function(done) {
+    it('should be able to skip subdirectories with `skip` flag', function(done) {
+      var home = tree.getPath('home');
       var options = {
         delay: 0,
         recursive: true,
         filter: function(name, skip) {
-          if (/deep_node_modules/.test(name)) return skip;
+          if (/\/deep_node_modules/.test(name)) return skip;
         }
       };
-
-      watcher = watch(tree.getPath('home'), options);
+      watcher = watch(home, options);
 
       watcher.getWatchedPaths(function(paths) {
-        var found = paths.find(n => /deep_node_modules/.test(n));
-        assert(!found, 'failed to skip subdirectory');
-        done();
+        hasNativeRecursive(function(supportRecursive) {
+          let watched = supportRecursive
+          // The skip flag has no effect to the platforms which support recursive option,
+          // so the home directory is the only one that's in the watching list.
+          ? [home]
+          // The deep_node_modules and all its subdirectories should not be watched
+          // with skip flag specified in the filter.
+          : tree.getAllDirectories().filter(function(name) {
+              return !/\/deep_node_modules/.test(name);
+            });
+
+          assert.deepStrictEqual(
+            watched.sort(), paths.sort()
+          );
+
+          done();
+        });
       });
     });
-
   });
 
   describe('delay', function() {
@@ -600,51 +613,124 @@ describe('watcher object', function() {
     });
   });
 
-  it('should close a watcher using .close()', function(done) {
-    var dir = tree.getPath('home/a');
-    var file = 'home/a/file1';
-    var times = 0;
-    watcher = watch(dir, { delay: 0 });
-    watcher.on('change', function(evt, name) {
-      times++;
+  describe('close()', function() {
+    it('should close a watcher using .close()', function(done) {
+      var dir = tree.getPath('home/a');
+      var file = 'home/a/file1';
+      var times = 0;
+      watcher = watch(dir, { delay: 0 });
+      watcher.on('change', function(evt, name) {
+        times++;
+      });
+      watcher.on('ready', function() {
+
+        watcher.close();
+
+        tree.modify(file);
+        tree.modify(file, 100);
+
+        setTimeout(function() {
+          assert(watcher.isClosed(), 'watcher should be closed');
+          assert.equal(times, 0, 'failed to close the watcher');
+          done();
+        }, 150);
+      });
     });
-    watcher.on('ready', function() {
 
-      watcher.close();
+    it('Do not emit after close', function(done) {
+      var dir = tree.getPath('home/a');
+      var file = 'home/a/file1';
+      var times = 0;
+      watcher = watch(dir, { delay: 0 });
+      watcher.on('change', function(evt, name) {
+        times++;
+      });
+      watcher.on('ready', function() {
 
-      tree.modify(file);
-      tree.modify(file, 100);
+        watcher.close();
 
-      setTimeout(function() {
-        assert(watcher.isClosed(), 'watcher should be closed');
-        assert.equal(times, 0, 'failed to close the watcher');
-        done();
-      }, 150);
+        var timer = setInterval(function() {
+          tree.modify(file);
+        });
+
+        setTimeout(function() {
+          clearInterval(timer);
+          assert(watcher.isClosed(), 'watcher should be closed');
+          assert.equal(times, 0, 'failed to close the watcher');
+          done();
+        }, 100);
+      });
     });
   });
 
-  it('Do not emit after close', function(done) {
-    var dir = tree.getPath('home/a');
-    var file = 'home/a/file1';
-    var times = 0;
-    watcher = watch(dir, { delay: 0 });
-    watcher.on('change', function(evt, name) {
-      times++;
+  describe('getWatchedPaths()', function() {
+    it('should get all the watched paths', function(done) {
+      var home = tree.getPath('home');
+      watcher = watch(home, {
+        delay: 0,
+        recursive: true
+      });
+      watcher.getWatchedPaths(function(paths) {
+        hasNativeRecursive(function(supportRecursive) {
+          let watched = supportRecursive
+            // The home directory is the only one that's being watched
+            // if the recursive option is natively supported.
+            ? [home]
+            // Otherwise it should include all its subdirectories.
+            : tree.getAllDirectories();
+
+          assert.deepStrictEqual(
+            watched.sort(), paths.sort()
+          );
+
+          done();
+        });
+      });
     });
-    watcher.on('ready', function() {
 
-      watcher.close();
+    it('should get its parent path instead of the file itself', function(done) {
+      var file = tree.getPath('home/a/file1');
+      // The parent path is actually being watched instead.
+      var parent = tree.getPath('home/a');
 
-      var timer = setInterval(function() {
-        tree.modify(file);
+      watcher = watch(file, { delay: 0 });
+
+      watcher.getWatchedPaths(function(paths) {
+        assert.deepStrictEqual([parent], paths);
+        done();
+      });
+    });
+
+    it('should work correctly with composed watcher', function(done) {
+      var a = tree.getPath('home/a');
+
+      var b = tree.getPath('home/b');
+      var file = tree.getPath('home/b/file1');
+
+      var nested = tree.getPath('home/deep_node_modules');
+      var ma = tree.getPath('home/deep_node_modules/ma');
+      var mb = tree.getPath('home/deep_node_modules/mb');
+      var mc = tree.getPath('home/deep_node_modules/mc');
+
+      watcher = watch([a, file, nested], {
+        delay: 0,
+        recursive: true
       });
 
-      setTimeout(function() {
-        clearInterval(timer);
-        assert(watcher.isClosed(), 'watcher should be closed');
-        assert.equal(times, 0, 'failed to close the watcher');
-        done();
-      }, 100);
+      watcher.getWatchedPaths(function(paths) {
+        hasNativeRecursive(function(supportRecursive) {
+          let watched = supportRecursive
+            ? [a, b, nested]
+            : [a, b, nested, ma, mb, mc]
+
+          assert.deepStrictEqual(
+            watched.sort(), paths.sort()
+          );
+
+          done();
+        });
+      });
     });
+
   });
 });
