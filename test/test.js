@@ -182,6 +182,28 @@ describe('watch for directories', function() {
     });
   });
 
+  it('should not watch new created directories which are being skipped in the filter', function(done) {
+    var home = tree.getPath('home');
+    var options = {
+      delay: 0,
+      recursive: true,
+      filter: function(filePath, skip) {
+        if (/\/ignored/.test(filePath)) return skip;
+        return true;
+      }
+    }
+
+    watcher = watch(home, options, function(evt, name) {
+      assert.fail("event detect");
+    });
+
+    watcher.on('ready', function() {
+      tree.newFile('home/ignored/file');
+      tree.modify('home/ignored/file', 100);
+      setTimeout(done, 150);
+    });
+  });
+
   it('should keep watching after removal of sub directory', function(done) {
     var home = tree.getPath('home');
     var file1 = tree.getPath('home/e/file1');
