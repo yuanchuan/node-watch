@@ -56,8 +56,12 @@ function transform(arr) {
 
 var transformed= transform(code);
 var defaultTestPath= path.join(__dirname, '__TREE__');
+var timers = [];
 
 module.exports = function builder() {
+  timers.forEach(clearTimeout);
+  timers = [];
+
   var root = defaultTestPath;
   transformed.forEach(function(line) {
     var target = path.join(root, line.text)
@@ -74,21 +78,21 @@ module.exports = function builder() {
     },
     modify: function(fpath, delay) {
       var filePath = this.getPath(fpath);
-      setTimeout(function() {
+      timers.push(setTimeout(function() {
         fs.appendFileSync(filePath, 'hello');
-      }, delay || 0);
+      }, delay || 0));
     },
     remove: function(fpath, delay) {
       var filePath = this.getPath(fpath);
-      setTimeout(function() {
+      timers.push(setTimeout(function() {
         fs.removeSync(filePath);
-      }, delay || 0);
+      }, delay || 0));
     },
     newFile: function(fpath, delay) {
       var filePath = this.getPath(fpath);
-      setTimeout(function() {
+      timers.push(setTimeout(function() {
         fs.ensureFileSync(filePath);
-      }, delay || 0)
+      }, delay || 0));
     },
     newRandomFiles: function(fpath, count) {
       var names = [];
