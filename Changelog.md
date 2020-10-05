@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0
+
+* Add an extra flag for skipping sub-directories inside filter function.
+
 ## 0.6.4
 
 * Fix `ERR_FEATURE_UNAVAILABLE_ON_PLATFORM` error for Node v14.
