@@ -1,5 +1,6 @@
 var fs = require('fs-extra');
 var path = require('path');
+
 var structure = fs.readFileSync(
   path.join(__dirname, './structure'),
   'utf-8'
@@ -56,7 +57,24 @@ function transform(arr) {
 var transformed= transform(code);
 var defaultTestPath= path.join(__dirname, '__TREE__');
 
+var delayTimers = [];
+
+function maybeDelay(fn, delay) {
+  if (delay) {
+    delayTimers.push(setTimeout(fn, delay));
+  } else {
+    fn();
+  }
+}
+
+function clearDelayTimers() {
+  delayTimers.forEach(clearTimeout);
+  delayTimers.length = 0;
+}
+
 module.exports = function builder() {
+  clearDelayTimers();
+
   var root = defaultTestPath;
   transformed.forEach(function(line) {
     var target = path.join(root, line.text)
@@ -73,21 +91,21 @@ module.exports = function builder() {
     },
     modify: function(fpath, delay) {
       var filePath = this.getPath(fpath);
-      setTimeout(function() {
+      maybeDelay(function() {
         fs.appendFileSync(filePath, 'hello');
-      }, delay || 0);
+      }, delay);
     },
     remove: function(fpath, delay) {
       var filePath = this.getPath(fpath);
-      setTimeout(function() {
+      maybeDelay(function() {
         fs.removeSync(filePath);
-      }, delay || 0);
+      }, delay);
     },
     newFile: function(fpath, delay) {
       var filePath = this.getPath(fpath);
-      setTimeout(function() {
+      maybeDelay(function() {
         fs.ensureFileSync(filePath);
-      }, delay || 0)
+      }, delay);
     },
     newRandomFiles: function(fpath, count) {
       var names = [];
@@ -107,9 +125,9 @@ module.exports = function builder() {
     },
     newDir: function(fpath, delay) {
       var filePath = this.getPath(fpath);
-      setTimeout(function() {
+      maybeDelay(function() {
         fs.ensureDirSync(filePath);
-      }, delay || 0);
+      }, delay);
     },
     cleanup: function() {
       try {
@@ -117,6 +135,20 @@ module.exports = function builder() {
       } catch (e) {
         console.warn('cleanup failed.');
       }
+    },
+    getAllDirectories: function() {
+      function walk(dir) {
+        var ret = [];
+        fs.readdirSync(dir).forEach(function(d) {
+          var fpath = path.join(dir, d);
+          if (fs.statSync(fpath).isDirectory()) {
+            ret.push(fpath);
+            ret = ret.concat(walk(fpath));
+          }
+        });
+        return ret;
+      }
+      return walk(root);
     }
   }
 }
