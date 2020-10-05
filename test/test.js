@@ -188,13 +188,13 @@ describe('watch for directories', function() {
       delay: 0,
       recursive: true,
       filter: function(filePath, skip) {
-        if (/\/ignored/.test(filePath)) return skip;
+        if (/ignored/.test(filePath)) return skip;
         return true;
       }
     }
 
     watcher = watch(home, options, function(evt, name) {
-      assert.fail("event detect");
+      assert.fail("event detect", name);
     });
 
     watcher.on('ready', function() {
