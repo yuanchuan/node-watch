@@ -25,6 +25,21 @@ after(function() {
   }
 });
 
+function wait(fn, timeout) {
+  try {
+    fn();
+  } catch (error) {
+    timeout -= 30;
+    if (timeout >= 0) {
+      setTimeout(function() {
+        wait(fn, timeout);
+      }, 30);
+    } else {
+      throw error;
+    }
+  }
+}
+
 describe('process events', function() {
   it('should emit `close` event', function(done) {
     var file = 'home/a/file1';
@@ -111,7 +126,7 @@ describe('watch for files', function() {
       tree.modify(file, 100);
       tree.modify(file, 150);
 
-      setTimeout(function() {
+      wait(function() {
         assert.equal(times, 1)
         done();
       }, 250);
@@ -130,7 +145,7 @@ describe('watch for files', function() {
     watcher.on('ready', function() {
       tree.newFile(newfile1);
       tree.newFile(newfile2);
-      setTimeout(function() {
+      wait(function() {
         assert.deepStrictEqual(
           changes,
           [tree.getPath(newfile1), tree.getPath(newfile2)]
@@ -155,7 +170,7 @@ describe('watch for directories', function() {
     watcher.on('ready', function() {
       tree.remove('home/c');
 
-      setTimeout(function () {
+      wait(function () {
         assert.deepStrictEqual(
           events,
           [ 'remove' ]
@@ -200,7 +215,7 @@ describe('watch for directories', function() {
     watcher.on('ready', function() {
       tree.newFile('home/ignored/file');
       tree.modify('home/ignored/file', 100);
-      setTimeout(done, 150);
+      wait(done, 150);
     });
   });
 
@@ -220,7 +235,7 @@ describe('watch for directories', function() {
       tree.modify('home/e/file1', 100);
       tree.modify('home/e/file2', 200);
 
-      setTimeout(function() {
+      wait(function() {
         assert.deepStrictEqual(events, [dir, file1, file2]);
         done();
       }, 300);
@@ -239,7 +254,7 @@ describe('watch for directories', function() {
       tree.newFile('home/new/file1');
       tree.modify('home/new/file1', 50);
       tree.modify('home/new/file1', 100);
-      setTimeout(function() {
+      wait(function() {
         assert.deepStrictEqual(events, ['update']);
         done();
       }, 350);
@@ -423,7 +438,7 @@ describe('options', function() {
         tree.modify('home/b/file1');
         tree.modify('home/deep_node_modules/ma/file1');
 
-        setTimeout(function() {
+        wait(function() {
           assert(matchRegularDir, 'watch failed to detect regular file');
           assert(!matchIgnoredDir, 'fail to ignore path `deep_node_modules`');
           done();
@@ -454,9 +469,9 @@ describe('options', function() {
       });
       watcher.on('ready', function() {
         tree.modify(file1);
-        tree.modify(file2);
+        tree.modify(file2, 50);
 
-        setTimeout(function() {
+        wait(function() {
           assert.equal(times, 1, 'should only report /home/bb/file2 once');
           assert.equal(matchIgnoredFile, false, 'home/bb/file1 should be ignored');
           done();
@@ -485,9 +500,9 @@ describe('options', function() {
       });
       watcher.on('ready', function() {
         tree.modify(file1);
-        tree.modify(file2);
+        tree.modify(file2, 50);
 
-        setTimeout(function() {
+        wait(function() {
           assert(times, 1, 'report file2');
           assert(!matchIgnoredFile, 'home/bb/file1 should be ignored');
           done();
@@ -582,7 +597,7 @@ describe('parameters', function() {
 
     watcher.on('ready', function() {
       tree.modify(file1);
-      tree.modify(file2);
+      tree.modify(file2, 50);
     });
   });
 
@@ -605,9 +620,9 @@ describe('parameters', function() {
 
     watcher.on('ready', function() {
       tree.modify(file1);
-      tree.modify(file2);
+      tree.modify(file2, 50);
 
-      setTimeout(function() {
+      wait(function() {
         assert.deepStrictEqual(
           changes,
           [tree.getPath(file1), tree.getPath(file2)]
@@ -651,7 +666,7 @@ describe('watcher object', function() {
         tree.modify(file);
         tree.modify(file, 100);
 
-        setTimeout(function() {
+        wait(function() {
           assert(watcher.isClosed(), 'watcher should be closed');
           assert.equal(times, 0, 'failed to close the watcher');
           done();
@@ -675,7 +690,7 @@ describe('watcher object', function() {
           tree.modify(file);
         });
 
-        setTimeout(function() {
+        wait(function() {
           clearInterval(timer);
           assert(watcher.isClosed(), 'watcher should be closed');
           assert.equal(times, 0, 'failed to close the watcher');
