@@ -146,18 +146,26 @@ describe('watch for files', function() {
       tree.newFile(newfile1);
       tree.newFile(newfile2);
       wait(function() {
-        // On windows it will report its parent directory along the the filename
+        // On windows it will report its parent directory along with the filename
         // https://github.com/yuanchuan/node-watch/issues/79
         if (is.windows()) {
-          assert.deepStrictEqual(
-            changes.sort(),
-            [
-              tree.getPath('home/a'),
-              tree.getPath('home/a'),
-              tree.getPath(newfile1),
-              tree.getPath(newfile2)
-            ].sort()
+          // Make sure new files are deteced
+          assert.ok(
+            changes.includes(tree.getPath(newfile1)) &&
+            changes.includes(tree.getPath(newfile2))
           );
+          // It should only include new files and its parent directory
+          // if there are more than 2 events
+          if (changes.length > 2) {
+            let accepts = [
+              tree.getPath(newfile1),
+              tree.getPath(newfile2),
+              tree.getPath('home/a')
+            ];
+            changes.forEach(function(name) {
+              assert.ok(accepts.includes(name), name + " should not be included");
+            });
+          }
         } else {
           assert.deepStrictEqual(
             changes,
