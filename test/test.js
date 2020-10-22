@@ -1,6 +1,7 @@
 var assert = require('assert');
 var Tree = require('./utils/builder');
 var watch = require('../lib/watch');
+var is = require('../lib/is');
 var hasNativeRecursive = require('../lib/has-native-recursive');
 
 var tree = Tree();
@@ -133,7 +134,6 @@ describe('watch for files', function() {
     });
   });
 
-  // https://github.com/yuanchuan/node-watch/issues/79
   it('should listen to new created files', function(done) {
     var home = tree.getPath('home');
     var newfile1 = 'home/a/newfile' + Math.random();
@@ -146,10 +146,24 @@ describe('watch for files', function() {
       tree.newFile(newfile1);
       tree.newFile(newfile2);
       wait(function() {
-        assert.deepStrictEqual(
-          changes,
-          [tree.getPath(newfile1), tree.getPath(newfile2)]
-        );
+        // On windows it will report its parent directory along the the filename
+        // https://github.com/yuanchuan/node-watch/issues/79
+        if (is.windows()) {
+          assert.deepStrictEqual(
+            changes.sort(),
+            [
+              tree.getPath('home/a'),
+              tree.getPath('home/a'),
+              tree.getPath(newfile1),
+              tree.getPath(newfile2)
+            ].sort()
+          );
+        } else {
+          assert.deepStrictEqual(
+            changes,
+            [tree.getPath(newfile1), tree.getPath(newfile2)]
+          );
+        }
         done();
       }, 100);
     });
@@ -549,12 +563,12 @@ describe('options', function() {
       var file = 'home/a/file1';
       var start;
       watcher = watch(dir, { delay: 300 }, function(evt, name) {
-        assert(Date.now() - start > 300, 'delay not working');
+        assert(Date.now() - start >= 300, 'delay not working');
         done();
       });
       watcher.on('ready', function() {
-        tree.modify(file);
         start = Date.now();
+        tree.modify(file);
       });
     });
   });
