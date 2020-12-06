@@ -696,6 +696,17 @@ describe('watcher object', function() {
       });
     });
 
+    it('should not watch after .close() is called', function(done) {
+      var dir = tree.getPath('home');
+      watcher = watch(dir, { delay: 0, recursive: true });
+      watcher.close();
+
+      watcher.getWatchedPaths(function(dirs) {
+        assert(dirs.length === 0);
+        done();
+      });
+    });
+
     it('Do not emit after close', function(done) {
       var dir = tree.getPath('home/a');
       var file = 'home/a/file1';
@@ -720,6 +731,7 @@ describe('watcher object', function() {
         }, 100);
       });
     });
+
   });
 
   describe('getWatchedPaths()', function() {
