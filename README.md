@@ -240,4 +240,4 @@ This project follows the [all-contributors](https://github.com/kentcdodds/all-co
 ## License
 MIT
 
-Copyright (c) 2020 [yuanchuan](https://github.com/yuanchuan)
+Copyright (c) 2012-2021 [yuanchuan](https://github.com/yuanchuan)
