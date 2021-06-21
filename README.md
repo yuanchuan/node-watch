@@ -73,7 +73,7 @@ The usage and options of `node-watch` are compatible with [fs.watch](https://nod
 
     ```js
     watch('./', {
-      resursive: true,
+      recursive: true,
       filter(f, skip) {
         // skip node_modules
         if (/\/node_modules/.test(f)) return skip;
