@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.7.2
+
+* Reduce the released npm package size.
+
+<br> <br>
+
+
 ## 0.7.1
 
 * Don't normalize events for Windows or it might lose essential events.
