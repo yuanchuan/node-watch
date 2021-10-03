@@ -22,7 +22,7 @@ declare function watch(pathName: PathName, callback: Callback): Watcher;
 declare function watch(pathName: PathName, options: Options, callback: Callback): Watcher;
 
 type EventType = 'update' | 'remove';
-type Callback = (eventType ?: EventType, filePath ?: string) => any;
+type Callback = (eventType: EventType, filePath: string) => any;
 type PathName = string | Array<string>;
 type FilterReturn = boolean | symbol;
 
