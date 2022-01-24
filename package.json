@@ -11,7 +11,7 @@
     "watch",
     "watchfile"
   ],
-  "version": "0.7.2",
+  "version": "0.7.3",
   "bugs": {
     "url": "https://github.com/yuanchuan/node-watch/issues"
   },

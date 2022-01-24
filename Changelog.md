@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.7.3
+
+* Fixed the type definition of callback function. (by @xieyuheng)
+* Optimization to the guard function. (by @wmertens)
+* Switched to Github Actions for CI.
+
+<br> <br>
+
+
 ## 0.7.2
 
 * Reduce the released npm package size.
