@@ -585,11 +585,12 @@ describe('options', function() {
 describe('parameters', function() {
   it('should throw error on non-existed file', function(done) {
     var somedir = tree.getPath('home/somedir');
-    try {
-      watcher = watch(somedir);
-    } catch(err) {
-      done();
-    }
+    watcher = watch(somedir);
+    watcher.on('error', function(err) {
+      if (err.message.includes('does not exist')) {
+        done()
+      }
+    })
   });
 
   it('should accept filename as Buffer', function(done) {
