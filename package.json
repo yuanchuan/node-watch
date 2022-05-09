@@ -17,8 +17,8 @@
   },
   "url": "https://github.com/yuanchuan/node-watch",
   "author": "yuanchuan <yuanchuan23@gmail.com> (http://yuanchuan.name)",
-  "main": "lib/watch.js",
-  "types": "lib/watch.d.ts",
+  "main": "./lib/watch",
+  "types": "./lib/watch.d.ts",
   "files": [
     "lib/"
   ],

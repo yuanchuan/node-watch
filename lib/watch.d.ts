@@ -16,10 +16,10 @@ import { FSWatcher } from 'fs';
  * @param {Options|string} options
  * @param {Function} callback
  */
-export function watch(pathName: PathName): Watcher;
-export function watch(pathName: PathName, options: Options) : Watcher;
-export function watch(pathName: PathName, callback: Callback): Watcher;
-export function watch(pathName: PathName, options: Options, callback: Callback): Watcher;
+declare function watch(pathName: PathName): Watcher;
+declare function watch(pathName: PathName, options: Options) : Watcher;
+declare function watch(pathName: PathName, callback: Callback): Watcher;
+declare function watch(pathName: PathName, options: Options, callback: Callback): Watcher;
 
 export type EventType = 'update' | 'remove';
 type Callback = (eventType: EventType, filePath: string) => any;
@@ -71,3 +71,5 @@ export interface Watcher extends FSWatcher {
    */
   getWatchedPaths(): Array<string>;
 }
+
+export default watch;
