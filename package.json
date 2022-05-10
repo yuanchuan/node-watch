@@ -29,8 +29,10 @@
   "engines": {
     "node": ">=6"
   },
+  "dependencies": {
+    "fs-extra": "^10.1.0"
+  },
   "devDependencies": {
-    "fs-extra": "^7.0.1",
     "mocha": "^5.2.0"
   }
 }
