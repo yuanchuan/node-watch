@@ -176,6 +176,20 @@ describe('watch for files', function() {
       }, 100);
     });
   });
+
+  it('should error when parent gets deleted before calling fs.watch', function(done) {
+    var fpath = tree.getPath('home/a/file1');
+    watcher = watch(fpath, Object.defineProperty({}, 'test', {
+      enumerable: true,
+      get: function() {
+        tree.remove('home/a');
+        return 'test';
+      }
+    }));
+    watcher.on('error', function() {
+      done();
+    });
+  });
 });
 
 describe('watch for directories', function() {
@@ -280,6 +294,21 @@ describe('watch for directories', function() {
         assert.deepStrictEqual(events, ['update']);
         done();
       }, 350);
+    });
+  });
+
+  it('should error when directory gets deleted before calling fs.watch', function(done) {
+    var dir = 'home/c';
+    var fpath = tree.getPath(dir);
+    watcher = watch(fpath, Object.defineProperty({}, 'test', {
+      enumerable: true,
+      get: function() {
+        tree.remove(dir);
+        return 'test';
+      }
+    }));
+    watcher.on('error', function() {
+      done();
     });
   });
 });
