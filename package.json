@@ -11,7 +11,7 @@
     "watch",
     "watchfile"
   ],
-  "version": "0.7.3",
+  "version": "0.7.4",
   "bugs": {
     "url": "https://github.com/yuanchuan/node-watch/issues"
   },
@@ -31,6 +31,6 @@
   },
   "devDependencies": {
     "fs-extra": "^7.0.1",
-    "mocha": "^5.2.0"
+    "mocha": "^10.2.0"
   }
 }
