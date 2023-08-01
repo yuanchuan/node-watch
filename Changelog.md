@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.7.4
+
+* Fix: add export to interface #128 (by @multivoltage)
+* Catch fs.watch exceptions #125 (by @campersau )
+* Fix can't listener error event on incorrect file/directory #123 (by @leijuns)
+
+<br> <br>
+
+
 ## 0.7.3
 
 * Fixed the type definition of callback function. (by @xieyuheng)
