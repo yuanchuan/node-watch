@@ -60,7 +60,7 @@ type Options = {
   delay ?: number;
 };
 
-declare interface Watcher extends FSWatcher {
+export declare interface Watcher extends FSWatcher {
   /**
    * Returns `true` if the watcher has been closed.
    */
