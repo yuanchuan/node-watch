@@ -11,12 +11,16 @@ A wrapper and enhancements for [fs.watch](http://nodejs.org/api/fs.html#fs_fs_wa
 npm install node-watch
 ```
 
+## Requirements
+
+- Node.js >= 18.0.0
+
 ## Example
 
 ```js
-var watch = require('node-watch');
+const watch = require('node-watch');
 
-watch('file_or_dir', { recursive: true }, function(evt, name) {
+watch('file_or_dir', { recursive: true }, (evt, name) => {
   console.log('%s changed.', name);
 });
 ```
@@ -91,7 +95,7 @@ The usage and options of `node-watch` are compatible with [fs.watch](https://nod
 
      ```js
      const pm = require('picomatch');
-     let isMatch = pm('*.js');
+     const isMatch = pm('*.js');
 
      watch('./', {
        filter: f => isMatch(f)
@@ -112,13 +116,13 @@ The usage and options of `node-watch` are compatible with [fs.watch](https://nod
 The events provided by the callback function is either `update` or `remove`, which is less confusing to `fs.watch`'s `rename` or `change`.
 
 ```js
-watch('./', function(evt, name) {
+watch('./', (evt, name) => {
 
-  if (evt == 'update') {
+  if (evt === 'update') {
     // on create or modify
   }
 
-  if (evt == 'remove') {
+  if (evt === 'remove') {
     // on delete
   }
 
@@ -133,17 +137,17 @@ The watch function returns a [fs.FSWatcher](https://nodejs.org/api/fs.html#fs_cl
 #### Watcher events
 
 ```js
-let watcher = watch('./', { recursive: true });
+const watcher = watch('./', { recursive: true });
 
-watcher.on('change', function(evt, name) {
+watcher.on('change', (evt, name) => {
   // callback
 });
 
-watcher.on('error', function(err) {
+watcher.on('error', (err) => {
   // handle error
 });
 
-watcher.on('ready', function() {
+watcher.on('ready', () => {
   // the watcher is ready to respond to changes
 });
 ```
@@ -198,7 +202,7 @@ watch(['file1', 'file2'], console.log);
 // https://github.com/nodejs/node-v0.x-archive/issues/3211
 require('epipebomb')();
 
-let watcher = require('node-watch')(
+const watcher = require('node-watch')(
   process.argv[2] || './', { recursive: true }, console.log
 );
 
@@ -217,6 +221,19 @@ Follow this description to increase the limit:
 [https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit](https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit)
 
 
+## TypeScript
+
+This package includes TypeScript type definitions:
+
+```ts
+import watch, { Watcher, EventType } from 'node-watch';
+
+const watcher: Watcher = watch('./src', { recursive: true }, (evt: EventType, name: string) => {
+  console.log('%s changed.', name);
+});
+```
+
+
 ## Alternatives
 
 * [chokidar](https://github.com/paulmillr/chokidar)
@@ -230,4 +247,4 @@ Thanks goes to [all wonderful people](https://github.com/yuanchuan/node-watch/gr
 ## License
 MIT
 
-Copyright (c) 2012-2021 [yuanchuan](https://github.com/yuanchuan)
+Copyright (c) 2012-2026 [yuanchuan](https://github.com/yuanchuan)

@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.8.0
+
+### Breaking Changes
+* Minimum Node.js version is now 18.0.0 (previously 6.0.0).
+
+### Improvements
+* Modernized codebase - Converted all code to ES6+.
+* Removed `fs-extra` - replaced with native Node.js `fs` module functions.
+* Improved TypeScript definitions.
+* Added `exports` field** in package.json for better ESM compatibility.
+
+<br> <br>
+
+
 ## 0.7.3
 
 * Fixed the type definition of callback function. (by @xieyuheng)

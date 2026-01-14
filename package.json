@@ -1,36 +1,43 @@
 {
+  "name": "node-watch",
+  "version": "0.8.0",
   "description": "A wrapper and enhancements for fs.watch",
   "license": "MIT",
-  "name": "node-watch",
+  "author": "yuanchuan <yuanchuan23@gmail.com> (https://yuanchuan.dev)",
   "repository": {
-    "url": "git://github.com/yuanchuan/node-watch.git",
-    "type": "git"
+    "type": "git",
+    "url": "git://github.com/yuanchuan/node-watch.git"
+  },
+  "homepage": "https://github.com/yuanchuan/node-watch#readme",
+  "bugs": {
+    "url": "https://github.com/yuanchuan/node-watch/issues"
   },
   "keywords": [
     "fs.watch",
     "watch",
-    "watchfile"
+    "watchfile",
+    "file watcher",
+    "directory watcher"
   ],
-  "version": "0.7.3",
-  "bugs": {
-    "url": "https://github.com/yuanchuan/node-watch/issues"
-  },
-  "url": "https://github.com/yuanchuan/node-watch",
-  "author": "yuanchuan <yuanchuan23@gmail.com> (http://yuanchuan.name)",
-  "main": "./lib/watch",
+  "main": "./lib/watch.js",
   "types": "./lib/watch.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/watch.d.ts",
+      "require": "./lib/watch.js",
+      "default": "./lib/watch.js"
+    }
+  },
   "files": [
     "lib/"
   ],
-  "homepage": "https://github.com/yuanchuan/node-watch#readme",
   "scripts": {
-    "test": "mocha test/test.js --exit --slow 500"
+    "test": "mocha test/test.js --exit --slow 500 --timeout 5000"
   },
   "engines": {
-    "node": ">=6"
+    "node": ">=18"
   },
   "devDependencies": {
-    "fs-extra": "^7.0.1",
-    "mocha": "^5.2.0"
+    "mocha": "^11.7.5"
   }
 }
