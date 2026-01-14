@@ -1,64 +1,112 @@
-var fs = require('fs-extra');
-var path = require('path');
+'use strict';
 
-var structure = fs.readFileSync(
-  path.join(__dirname, './structure'),
-  'utf-8'
-);
+const fs = require('fs');
+const path = require('path');
 
-var code = structure
-  .split('\n')
-  .map(function(line) {
-    return {
-      indent: line.length - line.replace(/^\s+/,'').length,
-      type: /\/$/.test(line) ? 'dir': 'file',
-      text: line.replace(/^\s+|\s*\/\s*|\s+$/g, '')
-    }
-  })
+const structure = fs.readFileSync(path.join(__dirname, './structure'), 'utf-8');
 
+const code = structure.split('\n').map((line) => ({
+  indent: line.length - line.replace(/^\s+/, '').length,
+  type: /\/$/.test(line) ? 'dir' : 'file',
+  text: line.replace(/^\s+|\s*\/\s*|\s+$/g, '')
+}));
+
+/**
+ * Join path segments
+ * @param {string[]} arr - Path segments
+ * @returns {string}
+ */
 function join(arr) {
   return arr.join('/');
 }
 
+/**
+ * Transform parsed structure into path list
+ * @param {Array} arr - Parsed structure
+ * @returns {Array}
+ */
 function transform(arr) {
-  var result = [];
-  var temp = [];
-  var indent = 0;
-  arr.forEach(function(line) {
+  const result = [];
+  const temp = [];
+  let indent = 0;
+
+  arr.forEach((line) => {
     if (!line.text) {
       return;
-    }
-    else if (!line.indent) {
+    } else if (!line.indent) {
       temp.push(line.text);
-      result.push({type: line.type, text: join(temp) });
-    }
-    else if (indent < line.indent) {
+      result.push({ type: line.type, text: join(temp) });
+    } else if (indent < line.indent) {
       temp.push(line.text);
       result[result.length - 1].type = 'dir';
-      result.push({type: line.type, text: join(temp) });
-    }
-    else if (indent === line.indent) {
+      result.push({ type: line.type, text: join(temp) });
+    } else if (indent === line.indent) {
       temp.pop();
       temp.push(line.text);
-      result.push({type: line.type, text: join(temp) });
-    }
-    else if(indent > line.indent) {
+      result.push({ type: line.type, text: join(temp) });
+    } else if (indent > line.indent) {
       temp.pop();
       temp.pop();
-      temp.push(line.text)
-      result.push({type: line.type, text: join(temp) });
+      temp.push(line.text);
+      result.push({ type: line.type, text: join(temp) });
     }
 
     indent = line.indent;
   });
+
   return result;
 }
 
-var transformed= transform(code);
-var defaultTestPath= path.join(__dirname, '__TREE__');
+/**
+ * Ensure directory exists (like fs-extra's ensureDirSync)
+ * @param {string} dirPath - Directory path to ensure
+ */
+function ensureDirSync(dirPath) {
+  fs.mkdirSync(dirPath, { recursive: true });
+}
 
-var delayTimers = [];
+/**
+ * Ensure file exists, creating parent directories if needed (like fs-extra's ensureFileSync)
+ * @param {string} filePath - File path to ensure
+ */
+function ensureFileSync(filePath) {
+  const dir = path.dirname(filePath);
+  ensureDirSync(dir);
+  // Only create if it doesn't exist
+  if (!fs.existsSync(filePath)) {
+    fs.writeFileSync(filePath, '');
+  }
+}
 
+/**
+ * Remove file or directory recursively (like fs-extra's removeSync)
+ * @param {string} targetPath - Path to remove
+ */
+function removeSync(targetPath) {
+  fs.rmSync(targetPath, { recursive: true, force: true });
+}
+
+/**
+ * Ensure symlink exists, creating parent directories if needed
+ * @param {string} srcPath - Source path
+ * @param {string} destPath - Destination path
+ */
+function ensureSymlinkSync(srcPath, destPath) {
+  const dir = path.dirname(destPath);
+  ensureDirSync(dir);
+  fs.symlinkSync(srcPath, destPath);
+}
+
+const transformed = transform(code);
+const defaultTestPath = path.join(__dirname, '__TREE__');
+
+const delayTimers = [];
+
+/**
+ * Execute function with optional delay
+ * @param {Function} fn - Function to execute
+ * @param {number} [delay] - Delay in milliseconds
+ */
 function maybeDelay(fn, delay) {
   if (delay) {
     delayTimers.push(setTimeout(fn, delay));
@@ -67,80 +115,137 @@ function maybeDelay(fn, delay) {
   }
 }
 
+/**
+ * Clear all pending delay timers
+ */
 function clearDelayTimers() {
   delayTimers.forEach(clearTimeout);
   delayTimers.length = 0;
 }
 
+/**
+ * Create a test file tree builder
+ * @returns {Object} Tree builder interface
+ */
 module.exports = function builder() {
   clearDelayTimers();
 
-  var root = defaultTestPath;
-  transformed.forEach(function(line) {
-    var target = path.join(root, line.text)
+  const root = defaultTestPath;
+
+  transformed.forEach((line) => {
+    const target = path.join(root, line.text);
     if (line.type === 'dir') {
-      fs.ensureDirSync(target);
-    }
-    else {
-      fs.ensureFileSync(target);
+      ensureDirSync(target);
+    } else {
+      ensureFileSync(target);
     }
   });
+
   return {
-    getPath: function(fpath, sub) {
+    /**
+     * Get full path for a relative path
+     * @param {string} fpath - Relative path
+     * @param {string} [sub] - Sub path
+     * @returns {string}
+     */
+    getPath(fpath, sub) {
       return path.join(root, fpath, sub || '');
     },
-    modify: function(fpath, delay) {
-      var filePath = this.getPath(fpath);
-      maybeDelay(function() {
+
+    /**
+     * Modify a file (append content)
+     * @param {string} fpath - File path
+     * @param {number} [delay] - Delay in milliseconds
+     */
+    modify(fpath, delay) {
+      const filePath = this.getPath(fpath);
+      maybeDelay(() => {
         fs.appendFileSync(filePath, 'hello');
       }, delay);
     },
-    remove: function(fpath, delay) {
-      var filePath = this.getPath(fpath);
-      maybeDelay(function() {
-        fs.removeSync(filePath);
+
+    /**
+     * Remove a file or directory
+     * @param {string} fpath - Path to remove
+     * @param {number} [delay] - Delay in milliseconds
+     */
+    remove(fpath, delay) {
+      const filePath = this.getPath(fpath);
+      maybeDelay(() => {
+        removeSync(filePath);
       }, delay);
     },
-    newFile: function(fpath, delay) {
-      var filePath = this.getPath(fpath);
-      maybeDelay(function() {
-        fs.ensureFileSync(filePath);
+
+    /**
+     * Create a new file
+     * @param {string} fpath - File path
+     * @param {number} [delay] - Delay in milliseconds
+     */
+    newFile(fpath, delay) {
+      const filePath = this.getPath(fpath);
+      maybeDelay(() => {
+        ensureFileSync(filePath);
       }, delay);
     },
-    newRandomFiles: function(fpath, count) {
-      var names = [];
-      for (var i = 0; i < count; ++i) {
-        var name = Math.random().toString().substr(2);
-        var filePath = this.getPath(fpath, name);
-        fs.ensureFileSync(filePath);
+
+    /**
+     * Create multiple random files
+     * @param {string} fpath - Directory path
+     * @param {number} count - Number of files to create
+     * @returns {string[]} Array of created file paths
+     */
+    newRandomFiles(fpath, count) {
+      const names = [];
+      for (let i = 0; i < count; ++i) {
+        const name = Math.random().toString().slice(2);
+        const filePath = this.getPath(fpath, name);
+        ensureFileSync(filePath);
         names.push(path.join(fpath, name));
       }
       return names;
     },
-    newSymLink: function(src, dist) {
-      fs.ensureSymlinkSync(
-        this.getPath(src),
-        this.getPath(dist)
-      );
+
+    /**
+     * Create a symbolic link
+     * @param {string} src - Source path
+     * @param {string} dist - Destination path
+     */
+    newSymLink(src, dist) {
+      ensureSymlinkSync(this.getPath(src), this.getPath(dist));
     },
-    newDir: function(fpath, delay) {
-      var filePath = this.getPath(fpath);
-      maybeDelay(function() {
-        fs.ensureDirSync(filePath);
+
+    /**
+     * Create a new directory
+     * @param {string} fpath - Directory path
+     * @param {number} [delay] - Delay in milliseconds
+     */
+    newDir(fpath, delay) {
+      const filePath = this.getPath(fpath);
+      maybeDelay(() => {
+        ensureDirSync(filePath);
       }, delay);
     },
-    cleanup: function() {
+
+    /**
+     * Clean up the test tree
+     */
+    cleanup() {
       try {
-        fs.removeSync(root);
+        removeSync(root);
       } catch (e) {
         console.warn('cleanup failed.');
       }
     },
-    getAllDirectories: function() {
+
+    /**
+     * Get all directories in the tree
+     * @returns {string[]}
+     */
+    getAllDirectories() {
       function walk(dir) {
-        var ret = [];
-        fs.readdirSync(dir).forEach(function(d) {
-          var fpath = path.join(dir, d);
+        let ret = [];
+        fs.readdirSync(dir).forEach((d) => {
+          const fpath = path.join(dir, d);
           if (fs.statSync(fpath).isDirectory()) {
             ret.push(fpath);
             ret = ret.concat(walk(fpath));
@@ -150,5 +255,5 @@ module.exports = function builder() {
       }
       return walk(root);
     }
-  }
-}
+  };
+};

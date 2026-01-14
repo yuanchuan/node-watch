@@ -1,10 +1,25 @@
 # Changelog
 
+## 0.8.0
+
+### Breaking Changes
+* Minimum Node.js version is now 18.0.0 (previously 6.0.0).
+
+### Improvements
+* Modernized codebase - Converted all code to ES6+.
+* Removed `fs-extra` - replaced with native Node.js `fs` module functions.
+* Improved TypeScript definitions.
+* Added `exports` field** in package.json for better ESM compatibility.
+
+<br> <br>
+
+
 ## 0.7.4
 
 * Fix: add export to interface #128 (by @multivoltage)
 * Catch fs.watch exceptions #125 (by @campersau )
 * Fix can't listener error event on incorrect file/directory #123 (by @leijuns)
+
 
 <br> <br>
 
