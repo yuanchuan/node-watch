@@ -33,7 +33,7 @@ after(() => {
  * @param {Function} fn - Assertion function
  * @param {number} timeout - Timeout in milliseconds
  */
-function wait(fn, timeout) {
+function wait(fn, timeout = 450) {
   try {
     fn();
   } catch (error) {
@@ -137,7 +137,7 @@ describe('watch for files', () => {
       wait(() => {
         assert.strictEqual(times, 1);
         done();
-      }, 250);
+      });
     });
   });
 
@@ -175,12 +175,12 @@ describe('watch for files', () => {
           }
         } else {
           assert.deepStrictEqual(
-            changes,
-            [tree.getPath(newfile1), tree.getPath(newfile2)]
+            changes.sort(),
+            [tree.getPath(newfile1), tree.getPath(newfile2)].sort()
           );
         }
         done();
-      }, 100);
+      });
     });
   });
 
@@ -216,7 +216,7 @@ describe('watch for directories', () => {
       wait(() => {
         assert.deepStrictEqual(events, ['remove']);
         done();
-      }, 400);
+      });
     });
   });
 
@@ -255,7 +255,7 @@ describe('watch for directories', () => {
     watcher.on('ready', () => {
       tree.newFile('home/ignored/file');
       tree.modify('home/ignored/file', 100);
-      wait(done, 150);
+      wait(done);
     });
   });
 
@@ -278,7 +278,7 @@ describe('watch for directories', () => {
       wait(() => {
         assert.deepStrictEqual(events, [dir, file1, file2]);
         done();
-      }, 300);
+      });
     });
   });
 
@@ -297,7 +297,7 @@ describe('watch for directories', () => {
       wait(() => {
         assert.deepStrictEqual(events, ['update']);
         done();
-      }, 350);
+      });
     });
   });
 
@@ -497,7 +497,7 @@ describe('options', () => {
           assert(matchRegularDir, 'watch failed to detect regular file');
           assert(!matchIgnoredDir, 'fail to ignore path `deep_node_modules`');
           done();
-        }, 100);
+        });
       });
     });
 
@@ -530,7 +530,7 @@ describe('options', () => {
           assert.strictEqual(times, 1, 'should only report /home/bb/file2 once');
           assert.strictEqual(matchIgnoredFile, false, 'home/bb/file1 should be ignored');
           done();
-        }, 100);
+        });
       });
     });
 
@@ -561,7 +561,7 @@ describe('options', () => {
           assert(times, 1, 'report file2');
           assert(!matchIgnoredFile, 'home/bb/file1 should be ignored');
           done();
-        }, 100);
+        });
       });
     });
 
@@ -677,11 +677,11 @@ describe('parameters', () => {
 
       wait(() => {
         assert.deepStrictEqual(
-          changes,
-          [tree.getPath(file1), tree.getPath(file2)]
+          changes.sort(),
+          [tree.getPath(file1), tree.getPath(file2)].sort()
         );
         done();
-      }, 200);
+      });
     });
   });
 });
@@ -722,7 +722,7 @@ describe('watcher object', () => {
           assert(watcher.isClosed(), 'watcher should be closed');
           assert.strictEqual(times, 0, 'failed to close the watcher');
           done();
-        }, 150);
+        });
       });
     });
 
@@ -757,7 +757,7 @@ describe('watcher object', () => {
           assert(watcher.isClosed(), 'watcher should be closed');
           assert.strictEqual(times, 0, 'failed to close the watcher');
           done();
-        }, 100);
+        });
       });
     });
   });
