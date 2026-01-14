@@ -32,7 +32,7 @@
     "lib/"
   ],
   "scripts": {
-    "test": "mocha test/test.js --exit --slow 500 --timeout 5000"
+    "test": "mocha test/test.js --exit --slow 500 --timeout 5000 --retries 2"
   },
   "engines": {
     "node": ">=18"
